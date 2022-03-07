@@ -1,0 +1,23 @@
+.time-upload {
+  border: 2px dashed $green;
+  width: max-content;
+  text-align: center;
+  color: $dark-green;
+
+  & i {
+    font-size: 2em;
+    padding: 70px 100px 70px 100px;
+  }
+
+  & .previewImage {
+    width: 300px;
+  }
+}
+
+.time-upload:hover {
+  cursor: pointer;
+}
+
+.time-upload-input {
+  display: none;
+}

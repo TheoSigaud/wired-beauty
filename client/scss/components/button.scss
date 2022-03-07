@@ -1,0 +1,10 @@
+.time-button__green {
+  background-color: $green;
+  color: black;
+  outline: none;
+  box-shadow: none;
+}
+
+.time-button__green:hover {
+  background-color: $dark-green;
+}

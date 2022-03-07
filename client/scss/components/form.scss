@@ -1,0 +1,28 @@
+.time-form {
+  & input {
+    width: 450px;
+  }
+
+  & button {
+    width: max-content !important;
+  }
+
+  & .link {
+    color: white;
+    text-decoration: none;
+  }
+
+  & .link:hover {
+    cursor: pointer;
+  }
+
+  & .container-error {
+    color: red;
+    max-width: 450px;
+  }
+
+  & textarea {
+    width: 450px;
+    height: 150px !important;
+  }
+}

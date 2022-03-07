@@ -1,0 +1,17 @@
+.time-navbar {
+  background-color: $card-background;
+  color: white;
+
+  & li {
+    padding: 10px 5px 10px 5px;
+  }
+
+  & li:hover {
+    cursor: pointer;
+    color: grey;
+  }
+
+  & a {
+    font-size: 1.2em;
+  }
+}

@@ -1,0 +1,22 @@
+.time-card-story {
+  width: 30%;
+  min-width: 400px;
+
+  & img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  & p {
+    color: white;
+  }
+
+  &__description {
+    height: 150px;
+  }
+}
+
+h5 {
+  color: white;
+}

@@ -1,0 +1,16 @@
+.time-modal {
+  background-color: rgb(39, 49, 56);
+  width: 600px;
+
+  & .time-modal-header {
+    border: none;
+  }
+
+  & .time-modal-footer {
+    border: none;
+  }
+
+  & .time-button-close {
+    background-color: white;
+  }
+}

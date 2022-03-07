@@ -1,0 +1,99 @@
+body {
+  background-color: #2A2932; }
+
+h1, h2, h3, h4, h5, p, a {
+  color: white;
+  text-decoration: none; }
+
+a:hover {
+  color: white;
+  text-decoration: none; }
+
+input {
+  box-shadow: none !important; }
+
+.time-card-story {
+  width: 30%;
+  min-width: 400px; }
+  .time-card-story img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; }
+  .time-card-story p {
+    color: white; }
+  .time-card-story__description {
+    height: 150px; }
+
+h5 {
+  color: white; }
+
+.time-card {
+  background-color: #3c3c48; }
+
+.time-modal {
+  background-color: #273138;
+  width: 600px; }
+  .time-modal .time-modal-header {
+    border: none; }
+  .time-modal .time-modal-footer {
+    border: none; }
+  .time-modal .time-button-close {
+    background-color: white; }
+
+.time-form input {
+  width: 450px; }
+
+.time-form button {
+  width: max-content !important; }
+
+.time-form .link {
+  color: white;
+  text-decoration: none; }
+
+.time-form .link:hover {
+  cursor: pointer; }
+
+.time-form .container-error {
+  color: red;
+  max-width: 450px; }
+
+.time-form textarea {
+  width: 450px;
+  height: 150px !important; }
+
+.time-button__green {
+  background-color: #81fbb8;
+  color: black;
+  outline: none;
+  box-shadow: none; }
+
+.time-button__green:hover {
+  background-color: #53cc8b; }
+
+.time-upload {
+  border: 2px dashed #81fbb8;
+  width: max-content;
+  text-align: center;
+  color: #53cc8b; }
+  .time-upload i {
+    font-size: 2em;
+    padding: 70px 100px 70px 100px; }
+  .time-upload .previewImage {
+    width: 300px; }
+
+.time-upload:hover {
+  cursor: pointer; }
+
+.time-upload-input {
+  display: none; }
+
+.time-navbar {
+  background-color: #3c3c48;
+  color: white; }
+  .time-navbar li {
+    padding: 10px 5px 10px 5px; }
+  .time-navbar li:hover {
+    cursor: pointer;
+    color: grey; }
+  .time-navbar a {
+    font-size: 1.2em; }
