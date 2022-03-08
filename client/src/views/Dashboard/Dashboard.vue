@@ -69,6 +69,7 @@
                     {{ userId }}
                   </option>
                 </select>
+                <p v-if="errors.user" style="color: red">{{errors.user}}</p>
 
                 <p style="color: black">Axe X</p>
                 <select v-model="axisX">
@@ -76,6 +77,7 @@
                     {{ title }}
                   </option>
                 </select>
+                <p v-if="errors.user" style="color: red">{{errors.x}}</p>
 
                 <p style="color: black">Axe Y</p>
                 <select v-model="axisY">
@@ -83,6 +85,7 @@
                     {{ title }}
                   </option>
                 </select>
+                <p v-if="errors.user" style="color: red">{{errors.y}}</p>
 
                 <button @click="generateGraph()">Générer le graphique</button>
               </div>

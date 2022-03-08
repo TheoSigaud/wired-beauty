@@ -11,12 +11,17 @@ export default {
       showSelectAxes: false,
       titles: [],
       usersId: [],
-      typeChart: null,
+      typeChart: 'line',
       axisX: null,
       axisY: null,
       selectUserId: null,
       arrayX: [],
-      arrayY: []
+      arrayY: [],
+      errors: {
+        x: null,
+        y: null,
+        user: null
+      }
     }
   },
 
@@ -64,27 +69,46 @@ export default {
     },
 
     async generateGraph() {
-      let tmpTitles = this.fileSplit[0].split(',');
+      this.errors.user = null;
+      this.errors.x = null;
+      this.errors.y = null;
 
-      let posX = tmpTitles.indexOf(this.axisX);
-      let posY = tmpTitles.indexOf(this.axisY);
+      if (this.axisX === null){
+        this.errors.x = 'Le champ est obligatoire'
+      }
 
-      this.fileSplit.shift();
-      this.fileSplit.forEach(element => {
-        let elementSplit= element.split(',');
-        if (this.selectUserId !== 'all'){
-          if (elementSplit.indexOf(this.selectUserId) !== -1) {
+      if (this.axisY === null){
+        this.errors.y = 'Le champ est obligatoire'
+      }
+
+      if (this.selectUserId === null){
+        this.errors.user = 'Le champ est obligatoire'
+      }
+
+
+      if (this.errors.user === null && this.errors.x === null && this.errors.y === null) {
+
+        let tmpTitles = this.fileSplit[0].split(',');
+
+        let posX = tmpTitles.indexOf(this.axisX);
+        let posY = tmpTitles.indexOf(this.axisY);
+
+        this.fileSplit.shift();
+        this.fileSplit.forEach(element => {
+          let elementSplit = element.split(',');
+          if (this.selectUserId !== 'all') {
+            if (elementSplit.indexOf(this.selectUserId) !== -1) {
+              this.arrayX.push(elementSplit[posX]);
+              this.arrayY.push(elementSplit[posY]);
+            }
+          } else {
             this.arrayX.push(elementSplit[posX]);
             this.arrayY.push(elementSplit[posY]);
           }
-        } else {
-          this.arrayX.push(elementSplit[posX]);
-          this.arrayY.push(elementSplit[posY]);
-        }
-      });
+        });
 
-      await this.createChart();
-      // this.createChart(this.selectUserId, this.axisX, );
+        await this.createChart();
+      }
     },
 
     async createChart() {
