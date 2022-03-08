@@ -5,7 +5,8 @@ export default {
 
   data() {
     return {
-      image: null,
+      file: null,
+      fileSplit: null,
       showSelectChart: false,
       showSelectAxes: false,
       titles: [],
@@ -13,17 +14,15 @@ export default {
       typeChart: null,
       axisX: null,
       axisY: null,
-      selectUserId: null
+      selectUserId: null,
+      arrayX: [],
+      arrayY: []
     }
   },
 
-  mounted() {
-    this.createChart();
-  },
-
   methods: {
-    async uploadImage(e) {
-      this.image = e.target.files[0];
+    async uploadFile(e) {
+      this.file = e.target.files[0];
     },
 
     async upload() {
@@ -33,15 +32,18 @@ export default {
           this.showSelectChart = true;
 
           let arrayLine = data.split('\n');
+          this.fileSplit = data.split('\n');
           arrayLine.shift();
 
+
           arrayLine.forEach(element => {
-            element = element.split(',')[1];
-            if (this.usersId.indexOf(element) === -1) {
-              this.usersId.push(element)
-            }
+            element = element.split(',');
+            element.forEach(x => {
+              if (x.startsWith('WB') && this.usersId.indexOf(x) === -1) {
+                this.usersId.push(x)
+              }
+            })
           });
-          console.log(this.usersId);
         }
       );
     },
@@ -49,7 +51,7 @@ export default {
     async read() {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.readAsText(this.image);
+        reader.readAsText(this.file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = error => reject(error);
       });
@@ -61,15 +63,39 @@ export default {
       this.showSelectAxes = true;
     },
 
+    async generateGraph() {
+      let tmpTitles = this.fileSplit[0].split(',');
+
+      let posX = tmpTitles.indexOf(this.axisX);
+      let posY = tmpTitles.indexOf(this.axisY);
+
+      this.fileSplit.shift();
+      this.fileSplit.forEach(element => {
+        let elementSplit= element.split(',');
+        if (this.selectUserId !== 'all'){
+          if (elementSplit.indexOf(this.selectUserId) !== -1) {
+            this.arrayX.push(elementSplit[posX]);
+            this.arrayY.push(elementSplit[posY]);
+          }
+        } else {
+          this.arrayX.push(elementSplit[posX]);
+          this.arrayY.push(elementSplit[posY]);
+        }
+      });
+
+      await this.createChart();
+      // this.createChart(this.selectUserId, this.axisX, );
+    },
+
     async createChart() {
       var ctx = document.getElementById('turnover').getContext('2d'); //Structure du graphique chiffre d'affaires
-      const chartTurnover = new Chart(ctx, {
-        type: 'line',
+      new Chart(ctx, {
+        type: this.typeChart,
         data: {
-          labels: '',
+          labels: this.arrayX,
           datasets: [{
-            label: 'Chiffre d\'affaires',
-            data: '',
+            label: this.selectUserId,
+            data: this.arrayY,
             backgroundColor: 'rgba(111,207,151,0.3)',
             borderColor: '#27AE60',
             pointBackgroundColor: '#27AE60',

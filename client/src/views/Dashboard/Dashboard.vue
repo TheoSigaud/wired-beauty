@@ -7,7 +7,7 @@
         <div class="col-sm-6">
           <div class="card">
             <div class="card-body">
-              <input type="file" @change="uploadImage">
+              <input type="file" @change="uploadFile">
               <button @click="upload()">Upload</button>
             </div>
           </div>
@@ -16,7 +16,7 @@
     </div>
 
     <div v-if="showSelectChart">
-      <div class="container mt-5" @click="selectChart('vertical')">
+      <div class="container mt-5" @click="selectChart('bar')">
         <div class="row">
           <div class="col-sm-6">
             <div class="card">
@@ -57,7 +57,7 @@
     </div>
 
     <div v-if="showSelectAxes">
-      <div class="container mt-5" @click="selectChart('scatter')">
+      <div class="container mt-5">
         <div class="row">
           <div class="col-sm-6">
             <div class="card">
@@ -83,6 +83,8 @@
                     {{ title }}
                   </option>
                 </select>
+
+                <button @click="generateGraph()">Générer le graphique</button>
               </div>
             </div>
           </div>
