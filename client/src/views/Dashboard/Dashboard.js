@@ -5,6 +5,7 @@ export default {
 
   data() {
     return {
+      chart: null,
       file: null,
       fileSplit: null,
       showSelectChart: false,
@@ -26,11 +27,33 @@ export default {
   },
 
   methods: {
+
     async uploadFile(e) {
       this.file = e.target.files[0];
     },
 
     async upload() {
+      this.fileSplit = null;
+      this.showSelectChart = false;
+      this.showSelectAxes = false;
+      this.titles = [];
+      this.usersId = [];
+      this.typeChart = 'line';
+      this.axisX = null;
+      this.axisY = null;
+      this.selectUserId = null;
+      this.arrayX = [];
+      this.arrayY = [];
+      this.errors = {
+        x: null,
+        y: null,
+        user: null
+      }
+
+      if (this.chart !== null) {
+        this.chart.destroy();
+      }
+
       this.read().then(
         data => {
           this.titles = data.split('\n')[0].split(',');
@@ -113,7 +136,7 @@ export default {
 
     async createChart() {
       var ctx = document.getElementById('turnover').getContext('2d'); //Structure du graphique chiffre d'affaires
-      new Chart(ctx, {
+      this.chart = new Chart(ctx, {
         type: this.typeChart,
         data: {
           labels: this.arrayX,
