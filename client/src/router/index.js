@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
   const auth = getAuth()
   onAuthStateChanged(auth, (user) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (!user || !user.emailVerified) {
+      if (!user) {
         next('/')
       } else {
         next()

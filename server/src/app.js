@@ -114,8 +114,6 @@ app.delete('/posts/:id', (req, res) => {
   })
 })
 
-require('./Controllers/users')(app);
-require('./Controllers/stories')(app);
 
 
 app.listen(process.env.PORT || 8081)
