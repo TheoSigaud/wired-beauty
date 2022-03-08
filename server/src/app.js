@@ -3,8 +3,6 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const Post = require("../models/posts");
-
 const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json({limit : '50mb', extended : true}))
@@ -111,6 +109,16 @@ app.delete('/posts/:id', (req, res) => {
     res.send({
       success: true
     })
+  })
+})
+
+// Upload CSV
+app.post('/upload', (req, res) => {
+  let file = req.body.file;
+  console.log(file);
+
+  res.send({
+    success: true
   })
 })
 
