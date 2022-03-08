@@ -6,7 +6,6 @@ import NewPost from '@/components/NewPost'
 import EditPost from '@/components/EditPost'
 import Navbar from '@/components/Navbar/Navbar.vue'
 import Login from '@/views/Login.vue'
-import Register from '@/views/Register/Register.vue'
 import Users from '@/views/Users/Users.vue'
 import Dashboard from '@/views/Dashboard/Dashboard.vue'
 import Stories from '@/views/Stories/Stories.vue'
@@ -22,11 +21,6 @@ const router = new Router({
       path: '/',
       name: 'Login',
       component: Login
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      component: Register
     },
     {
       path: '/dashboard',
