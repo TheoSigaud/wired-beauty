@@ -17,7 +17,7 @@
     </div>
 
     <div style="width: 1400px; height: 500px">
-      <canvas id="graph"></canvas>
+      <canvas id="moisturizingChartLine"></canvas>
     </div>
   </div>
 </template>
