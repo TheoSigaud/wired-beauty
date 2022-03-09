@@ -8,8 +8,8 @@
               <li class="nav-item">Dashboard</li>
             </router-link>
 
-            <router-link v-bind:to="{ name: 'Stories' }">
-              <li class="nav-item">Histoires</li>
+            <router-link v-bind:to="{ name: 'Users' }">
+              <li class="nav-item">Clients</li>
             </router-link>
           </ul>
           <ul class="navbar-nav">
