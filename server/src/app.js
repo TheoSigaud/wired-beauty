@@ -2,6 +2,14 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
+const admin = require("firebase-admin")
+var serviceAccount = require("./wired-beauty-firebase-adminsdk-eo81i-887291162f.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const User = require("../models/users");
 
 const app = express()
 app.use(morgan('combined'))
@@ -37,91 +45,65 @@ db.once("open", function(callback){
   console.log("Connection Succeeded");
 });
 
-// SERVER Setup
-app.get('/posts', (req, res) => {
-  Post.find({}, 'title description', function (error, posts) {
-    if (error) { console.error(error); }
-    res.send({
-      posts: posts
-    })
-  }).sort({_id:-1})
-});
-
-
-// Post Endpoints
-app.post('/posts', (req, res) => {
-  var db = req.db;
-  var title = req.body.title;
-  var description = req.body.description;
-  var new_post = new Post({
-    title: title,
-    description: description
-  })
-
-  new_post.save(function (error) {
+//List all users
+app.get('/api/users', (req, res) => {
+  User.find({}, 'pseudo email password', function (error, users) {
     if (error) {
-      console.log(error)
+      console.error(error);
     }
     res.send({
-      success: true,
-      message: 'Post saved successfully!'
+      users: users
     })
+  }).sort({_id: -1})
+});
+
+//Create new user
+app.post('/api/users', (req, res) => {
+  const email = req.body.email.trim();
+
+
+  const new_user = new User({
+    email: email
   })
-})
 
-
-// Fetch single post
-app.get('/post/:id', (req, res) => {
-  var db = req.db;
-  Post.findById(req.params.id, 'title description', function (error, post) {
-    if (error) { console.error(error); }
-    res.send(post)
-  })
-})
-
-// Update a post
-app.put('/posts/:id', (req, res) => {
-  var db = req.db;
-  Post.findById(req.params.id, 'title description', function (error, post) {
-    if (error) { console.error(error); }
-
-    post.title = req.body.title
-    post.description = req.body.description
-    post.save(function (error) {
-      if (error) {
-        console.log(error)
-      }
-      res.send({
-        success: true
+  admin.auth()
+      .createUser({
+        email: email,
+        password: generatePwd()
       })
-    })
-  })
-})
+      .then((userRecord) => {
+        // See the UserRecord reference doc for the contents of userRecord.
+        console.log('Successfully created new user:', userRecord.uid);
+        new_user.save(function (error) {
+          if (error) {
+            console.log(error)
+          }
+          res.status(201);
+          res.send({
+            success: true,
+            message: 'User saved successfully!'
+          });
+        });
+      })
+      .catch((error) => {
+        console.log('Error creating new user:', error);
+        res.status(200);
+        res.send({
+          success: false,
+          message: 'User already exist!'
+        });
+      });
+});
 
-// Delete a post
-app.delete('/posts/:id', (req, res) => {
-  var db = req.db;
-  Post.remove({
-    _id: req.params.id
-  }, function(err, post){
-    if (err)
-      res.send(err)
-    res.send({
-      success: true
-    })
-  })
-})
-
-// Upload CSV
-app.post('/upload', (req, res) => {
-  let file = req.body.file;
-  console.log(file);
-
-  res.send({
-    success: true
-  })
-})
-
-
+function generatePwd() {
+  var result = '';
+  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < 15; i++) {
+    result += characters.charAt(Math.floor(Math.random() *
+        charactersLength));
+  }
+  return result;
+}
 
 app.listen(process.env.PORT || 8081)
