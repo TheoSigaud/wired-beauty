@@ -31,6 +31,7 @@
               <h5 class="card-title">Histoires</h5>
               <br>
               <router-link v-bind:to="{ name: 'Stories' }"><button class="btn btn-primary">Voir</button></router-link>
+              <pdf></pdf>
             </div>
           </div>
         </div>
