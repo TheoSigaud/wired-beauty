@@ -8,6 +8,8 @@ export default {
       chart: null,
       file: null,
       fileSplit: null,
+      fileShift: null,
+      errorUpload: null,
       showSelectChart: false,
       showSelectAxes: false,
       titles: [],
@@ -22,14 +24,20 @@ export default {
         x: null,
         y: null,
         user: null
-      }
+      },
+      arrayCharts: []
     }
   },
 
   methods: {
+    async addGraph() {
+      this.arrayCharts.push(this.chart.toBase64Image());
+      console.log(this.arrayCharts);
+    },
 
     async uploadFile(e) {
       this.file = e.target.files[0];
+      this.errorUpload = null;
     },
 
     async upload() {
@@ -56,22 +64,31 @@ export default {
 
       this.read().then(
         data => {
-          this.titles = data.split('\n')[0].split(',');
-          this.showSelectChart = true;
+          let nameSplit = this.file.name.split('.');
 
-          let arrayLine = data.split('\n');
-          this.fileSplit = data.split('\n');
-          arrayLine.shift();
+          if (nameSplit[nameSplit.length - 1] === 'csv') {
+
+            this.titles = data.split('\n')[0].split(',');
+            this.showSelectChart = true;
+
+            let arrayLine = data.split('\n');
+            this.fileSplit = data.split('\n');
+            this.fileShift = data.split('\n');
+            this.fileShift.shift();
+            arrayLine.shift();
 
 
-          arrayLine.forEach(element => {
-            element = element.split(',');
-            element.forEach(x => {
-              if (x.startsWith('WB') && this.usersId.indexOf(x) === -1) {
-                this.usersId.push(x)
-              }
-            })
-          });
+            arrayLine.forEach(element => {
+              element = element.split(',');
+              element.forEach(x => {
+                if (x.startsWith('WB') && this.usersId.indexOf(x) === -1) {
+                  this.usersId.push(x)
+                }
+              })
+            });
+          } else {
+            this.errorUpload = 'Le fichier n\'est pas un CSV';
+          }
         }
       );
     },
@@ -92,19 +109,22 @@ export default {
     },
 
     async generateGraph() {
+
       this.errors.user = null;
       this.errors.x = null;
       this.errors.y = null;
+      this.arrayX = [];
+      this.arrayY = [];
 
-      if (this.axisX === null){
+      if (this.axisX === null) {
         this.errors.x = 'Le champ est obligatoire'
       }
 
-      if (this.axisY === null){
+      if (this.axisY === null) {
         this.errors.y = 'Le champ est obligatoire'
       }
 
-      if (this.selectUserId === null){
+      if (this.selectUserId === null) {
         this.errors.user = 'Le champ est obligatoire'
       }
 
@@ -116,8 +136,7 @@ export default {
         let posX = tmpTitles.indexOf(this.axisX);
         let posY = tmpTitles.indexOf(this.axisY);
 
-        this.fileSplit.shift();
-        this.fileSplit.forEach(element => {
+        this.fileShift.forEach(element => {
           let elementSplit = element.split(',');
           if (this.selectUserId !== 'all') {
             if (elementSplit.indexOf(this.selectUserId) !== -1) {
@@ -135,7 +154,11 @@ export default {
     },
 
     async createChart() {
-      var ctx = document.getElementById('turnover').getContext('2d'); //Structure du graphique chiffre d'affaires
+
+      if (this.chart !== null) {
+        this.chart.destroy();
+      }
+      let ctx = document.getElementById('graph').getContext('2d'); //Structure du graphique chiffre d'affaires
       this.chart = new Chart(ctx, {
         type: this.typeChart,
         data: {
@@ -151,6 +174,9 @@ export default {
             pointHoverRadius: 10
           }]
         },
+        options: {
+          maintainAspectRatio: true
+        }
       })
     }
   }

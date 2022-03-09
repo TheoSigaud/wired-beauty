@@ -7,8 +7,9 @@
         <div class="col-sm-6">
           <div class="card">
             <div class="card-body">
-              <input type="file" @change="uploadFile">
+              <input type="file" accept=".csv" @change="uploadFile">
               <button @click="upload()">Upload</button>
+              <p v-if="errorUpload" style="color: red">{{errorUpload}}</p>
             </div>
           </div>
         </div>
@@ -94,7 +95,10 @@
         </div>
       </div>
     </div>
-    <canvas id="turnover" width="170" height="60"></canvas>
+    <button @click="addGraph()">Ajouter le graphique au rapport</button>
+    <div style="width: 1400px; height: 500px">
+      <canvas id="graph"></canvas>
+    </div>
   </div>
 </template>
 
