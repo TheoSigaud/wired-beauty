@@ -4,11 +4,11 @@
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarText">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <router-link v-bind:to="{ name: 'Dashboard' }">
+            <router-link v-bind:to="{ name: 'Dashboard' }" v-if="admin">
               <li class="nav-item">Dashboard</li>
             </router-link>
 
-            <router-link v-bind:to="{ name: 'Users' }">
+            <router-link v-bind:to="{ name: 'Users' }" v-if="admin">
               <li class="nav-item">Clients</li>
             </router-link>
           </ul>

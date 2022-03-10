@@ -56,7 +56,11 @@ export default {
       signInWithEmailAndPassword(auth, this.email, this.password)
         .then((userCredential) => {
           onAuthStateChanged(auth, (user) => {
-            this.$router.push({name: 'Dashboard'});
+            if (user.email === 'wired@gmail.com') {
+              this.$router.push({name: 'Dashboard'});
+            } else {
+              this.$router.push({name: 'Report'});
+            }
           })
         })
         .catch((error) => {

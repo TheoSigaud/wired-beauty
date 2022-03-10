@@ -1,6 +1,4 @@
-import DashboardService from '@/services/DashboardService';
 import * as XLSX from 'xlsx/xlsx.mjs';
-import {empty} from "nightwatch/lib/core/queue";
 
 export default {
   name: "Dashboard",
@@ -359,8 +357,67 @@ export default {
         [await this.quartile(vitc.t14, 50), await this.quartile(vitc.t14, 50)]
       ];
 
+      let tmpSkcAbr = {
+        t0: [],
+        timme: [],
+        t7: [],
+        t14: []
+      };
+
+      let tmpVitcAbr = {
+        t0: [],
+        timme: [],
+        t7: [],
+        t14: []
+      }
+
+      for (let i = 0; i < 4; i ++) {
+        let interQuartile = (await this.quartile(skc[Object.keys(skc)[i]], 75) - await this.quartile(skc[Object.keys(skc)[i]], 25));
+        let abr = await this.quartile(skc[Object.keys(skc)[i]], 75) + 1.5 * interQuartile;
+        skc[Object.keys(skc)[i]].forEach(element => {
+          if (element > abr) {
+            tmpSkcAbr[Object.keys(tmpSkcAbr)[i]].push([abr, abr]);
+          }
+        })
+      }
+
+      for (let i = 0; i < 4; i ++) {
+        let interQuartile = (await this.quartile(vitc[Object.keys(vitc)[i]], 75) - await this.quartile(vitc[Object.keys(vitc)[i]], 25));
+        let abr = await this.quartile(vitc[Object.keys(vitc)[i]], 75) + 1.5 * interQuartile;
+        vitc[Object.keys(vitc)[i]].forEach(element => {
+          if (element > abr) {
+            tmpVitcAbr[Object.keys(tmpVitcAbr)[i]].push([abr, abr]);
+          }
+        })
+      }
+
+      let dataSkcAbr = [
+        tmpSkcAbr.t0,
+        tmpSkcAbr.timme,
+        tmpSkcAbr.t7,
+        tmpSkcAbr.t14
+      ];
+
+      let dataVitcAbr = [
+        tmpVitcAbr.t0,
+        tmpVitcAbr.timme,
+        tmpVitcAbr.t7,
+        tmpVitcAbr.t14
+      ];
+
+      console.log(dataSkcAbr);
+      console.log(dataVitcAbr);
 
       const datasetsSkc = [
+        {
+          label: 'hideee',
+          data: dataSkcAbr,
+          backgroundColor: 'rgb(148,195,114)',
+          borderColor: 'rgb(59,170,118)',
+          minBarLength: 4,
+          barPercentage: 0.04,
+          stack: 'skc'
+        },
         {
           label: 'hide',
           data: dataSkcMedian,
@@ -381,6 +438,15 @@ export default {
           backgroundColor: 'rgb(190,45,45)',
           borderWidth: 0,
           stack: 'skc'
+        },
+        {
+          label: 'hidhe',
+          data: dataVitcAbr,
+          backgroundColor: 'rgb(195,114,176)',
+          borderColor: 'rgb(59,170,118)',
+          minBarLength: 4,
+          barPercentage: 0.04,
+          stack: 'vitc'
         },
         {
           label: 'Vitc',

@@ -1,4 +1,4 @@
-import {getAuth, signOut} from "firebase/auth";
+import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
 const auth = getAuth();
 
 export default {
@@ -6,10 +6,19 @@ export default {
 
   data () {
     return {
-      displayNavbar: false
+      admin: false
     }
   },
-  displayNavbar: false,
+
+  mounted() {
+    onAuthStateChanged(auth, (user) => {
+      if (user.email === 'wired@gmail.com') {
+        this.admin = true;
+      } else {
+        this.admin = false;
+      }
+    })
+  },
 
   methods: {
     async logOut () {
