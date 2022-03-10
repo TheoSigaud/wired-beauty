@@ -8,10 +8,11 @@
     <div v-if="users.length > 0" class="table-wrap">
       <table>
         <tr>
-=          <td>email</td>
+          <td>email</td>
         </tr>
         <tr v-bind:key="user.id" v-for="user in users">
           <td style="color: white">{{ user.email }}</td>
+          <td><button @click="deleteUser(user.uid)">Supprimer</button></td>
         </tr>
       </table>
     </div>

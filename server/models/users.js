@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
   email: String,
+  uid: String,
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -1,4 +1,4 @@
-import {getAuth, sendPasswordResetEmail, createUserWithEmailAndPassword} from "firebase/auth";
+import {getAuth, sendPasswordResetEmail} from "firebase/auth";
 import UsersService from '@/services/UsersService';
 
 export default {
