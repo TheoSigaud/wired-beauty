@@ -49,7 +49,7 @@ export default {
     async checkGenerate() {
       if (this.typeChart !== ''
         && this.typeProduct !== ''
-        && this.typeOption !== ''){
+        && this.typeOption !== '') {
         this.showGenerate = true;
       }
     },
@@ -57,7 +57,7 @@ export default {
     async generateChart() {
       switch (this.typeChart) {
         case 'compare':
-          await this.dataMoisturizingChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.Vivo, { header: 1 }));
+          await this.dataChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, {header: 1}));
           break
       }
 
@@ -78,85 +78,102 @@ export default {
     //////////////////////////////
     //      COMPARE      ////
     //////////////////////////////
-    async dataMoisturizingChartLine(data) {
-        let indexSkin = data[0].indexOf("score_skinbiosense");
-        let indexTime = data[0].indexOf("session_id");
-        let indexValue = data[0].indexOf("mesure");
-        let indexProduct = data[0].indexOf("product_code");
+    async dataChartLine(data) {
+      let indexSkin = data[0].indexOf("score_skinbiosense");
+      let indexTime = data[0].indexOf("session_id");
+      let indexValue = data[0].indexOf("mesure");
+      let indexProduct = data[0].indexOf("product_code");
 
-        let dataSkc = {
+      let dataSkc = {
+        data: {
+          t0: [],
+          timme: [],
+          t7: [],
+          t14: []
+        },
+        average: {
           t0: [],
           timme: [],
           t7: [],
           t14: []
         }
-
-      let dataVitc = {
-        t0: [],
-        timme: [],
-        t7: [],
-        t14: []
       }
 
-        data.shift();
+      let dataVitc = {
+        data: {
+          t0: [],
+          timme: [],
+          t7: [],
+          t14: []
+        },
+        average: {
+          t0: [],
+          timme: [],
+          t7: [],
+          t14: []
+        }
+      }
 
-        data.forEach(element => {
-          if (element[0] !== undefined) {
-            if (element[indexSkin] === Number(this.typeProduct)) {
-              switch (element[indexProduct]) {
-                case 417432:
-                  switch (element[indexTime]) {
-                    case 1:
-                      dataSkc.t0.push(element[indexValue]);
-                      break;
-                    case 2:
-                      dataSkc.timme.push(element[indexValue]);
-                      break;
-                    case 3:
-                      dataSkc.t7.push(element[indexValue]);
-                      break;
-                    case 4:
-                      dataSkc.t14.push(element[indexValue]);
-                      break;
-                  }
-                  break;
-                case 100218:
-                  switch (element[indexTime]) {
-                    case 1:
-                      dataVitc.t0.push(element[indexValue]);
-                      break;
-                    case 2:
-                      dataVitc.timme.push(element[indexValue]);
-                      break;
-                    case 3:
-                      dataVitc.t7.push(element[indexValue]);
-                      break;
-                    case 4:
-                      dataVitc.t14.push(element[indexValue]);
-                      break;
-                  }
-                  break;
-              }
+      data.shift();
+
+      data.forEach(element => {
+        if (element[0] !== undefined) {
+          if (element[indexSkin] === Number(this.typeProduct)) {
+            switch (element[indexProduct]) {
+              case 417432:
+                switch (element[indexTime]) {
+                  case 1:
+                    dataSkc.data.t0.push(element[indexValue]);
+                    break;
+                  case 2:
+                    dataSkc.data.timme.push(element[indexValue]);
+                    break;
+                  case 3:
+                    dataSkc.data.t7.push(element[indexValue]);
+                    break;
+                  case 4:
+                    dataSkc.data.t14.push(element[indexValue]);
+                    break;
+                }
+                break;
+              case 100218:
+                switch (element[indexTime]) {
+                  case 1:
+                    dataVitc.data.t0.push(element[indexValue]);
+                    break;
+                  case 2:
+                    dataVitc.data.timme.push(element[indexValue]);
+                    break;
+                  case 3:
+                    dataVitc.data.t7.push(element[indexValue]);
+                    break;
+                  case 4:
+                    dataVitc.data.t14.push(element[indexValue]);
+                    break;
+                }
+                break;
             }
           }
-        });
+        }
+      });
 
-      let arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length;
+      let arrAvg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
 
-      dataSkc.t0 = arrAvg(dataSkc.t0);
-      dataSkc.timme = arrAvg(dataSkc.timme);
-      dataSkc.t7 = arrAvg(dataSkc.t7);
-      dataSkc.t14 = arrAvg(dataSkc.t14);
+      dataSkc.average.t0 = arrAvg(dataSkc.data.t0);
+      dataSkc.average.timme = arrAvg(dataSkc.data.timme);
+      dataSkc.average.t7 = arrAvg(dataSkc.data.t7);
+      dataSkc.average.t14 = arrAvg(dataSkc.data.t14);
 
-      dataVitc.t0 = arrAvg(dataVitc.t0);
-      dataVitc.timme = arrAvg(dataVitc.timme);
-      dataVitc.t7 = arrAvg(dataVitc.t7);
-      dataVitc.t14 = arrAvg(dataVitc.t14);
+      dataVitc.average.t0 = arrAvg(dataVitc.data.t0);
+      dataVitc.average.timme = arrAvg(dataVitc.data.timme);
+      dataVitc.average.t7 = arrAvg(dataVitc.data.t7);
+      dataVitc.average.t14 = arrAvg(dataVitc.data.t14);
 
-      await this.moisturizingChartLine(dataSkc, dataVitc);
+      await this.chartLine(dataSkc.average, dataVitc.average);
+      await this.chartCandle(dataSkc, dataVitc);
     },
 
-    async moisturizingChartLine(skc, vitc) {
+    async chartLine(skc, vitc) {
       let dataSkc = [skc.t0, skc.timme, skc.t7, skc.t14];
       let dataVitc = [vitc.t0, vitc.timme, vitc.t7, vitc.t14];
 
@@ -168,14 +185,14 @@ export default {
 
       const datasetsSkc = [
         {
-          label: 'SKC',
+          label: 'Skc',
           data: dataSkc,
           borderColor: '#0dd1db',
           pointBackgroundColor: '#0dd1db',
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
-          borderDash: [10,5],
+          borderDash: [10, 5],
           order: 1,
           type: 'line'
         },
@@ -194,7 +211,6 @@ export default {
           label: 'hide',
           data: dataBetween,
           backgroundColor: 'rgba(111,207,151,0.3)',
-          pointBackgroundColor: '#27AE60',
           borderWidth: 0,
           barThickness: 5,
           order: 2,
@@ -203,7 +219,7 @@ export default {
 
       let containerCharts = document.getElementById('containerCharts');
 
-      let nameChart = 'chart'+this.countCharts.toString();
+      let nameChart = 'chart' + this.countCharts.toString();
 
       this.countCharts++;
 
@@ -225,6 +241,150 @@ export default {
         },
         options: {
           responsive: true,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                filter: function (item, chart) {
+                  return !item.text.includes('hide');
+                }
+              }
+            }
+          }
+        }
+      });
+
+      this.charts.push(chart.toBase64Image());
+    },
+
+    async chartCandle(skc, vitc) {
+      let dataSkcLine = [
+        [Math.min(...skc.data.t0), Math.max(...skc.data.t0)],
+        [Math.min(...skc.data.timme), Math.max(...skc.data.timme)],
+        [Math.min(...skc.data.t7), Math.max(...skc.data.t7)],
+        [Math.min(...skc.data.t14), Math.max(...skc.data.t14)]
+      ];
+
+      let dataSkcBar = [
+        [skc.data.t0[0], skc.data.t0[skc.data.t0.length - 1]],
+        [skc.data.timme[0], skc.data.timme[skc.data.timme.length - 1]],
+        [skc.data.t7[0], skc.data.t7[skc.data.t7.length - 1]],
+        [skc.data.t14[0], skc.data.t14[skc.data.t14.length - 1]]
+      ];
+
+      let dataSkcAverage = [
+        [skc.average.t0, skc.average.t0],
+        [skc.average.timme, skc.average.timme],
+        [skc.average.t7, skc.average.t7],
+        [skc.average.t14, skc.average.t14]
+      ];
+
+      let dataVitcLine = [
+        [Math.min(...vitc.data.t0), Math.max(...vitc.data.t0)],
+        [Math.min(...vitc.data.timme), Math.max(...vitc.data.timme)],
+        [Math.min(...vitc.data.t7), Math.max(...vitc.data.t7)],
+        [Math.min(...vitc.data.t14), Math.max(...vitc.data.t14)]
+      ];
+
+      let dataVitcBar = [
+        [vitc.data.t0[0], vitc.data.t0[vitc.data.t0.length - 1]],
+        [vitc.data.timme[0], vitc.data.timme[vitc.data.timme.length - 1]],
+        [vitc.data.t7[0], vitc.data.t7[vitc.data.t7.length - 1]],
+        [vitc.data.t14[0], vitc.data.t14[vitc.data.t14.length - 1]]
+      ];
+
+      let dataVitcAverage = [
+        [vitc.average.t0, vitc.average.t0],
+        [vitc.average.timme, vitc.average.timme],
+        [vitc.average.t7, vitc.average.t7],
+        [vitc.average.t14, vitc.average.t14]
+      ];
+
+
+      const datasetsSkc = [
+        {
+          label: 'hide',
+          data: dataSkcAverage,
+          backgroundColor: 'rgb(0,0,0)',
+          minBarLength: 3,
+          stack: 'skc'
+        },
+        {
+          label: 'hide',
+          data: dataVitcAverage,
+          backgroundColor: 'rgb(0,0,0)',
+          minBarLength: 3,
+          stack: 'vitc'
+        },
+        {
+          label: 'Skc',
+          data: dataSkcBar,
+          backgroundColor: 'rgb(190,45,45)',
+          borderWidth: 0,
+          stack: 'skc'
+        },
+        {
+          label: 'Vitc',
+          data: dataVitcBar,
+          backgroundColor: 'rgb(13,209,219)',
+          borderWidth: 0,
+          stack: 'vitc'
+        },
+        {
+          label: 'hide',
+          data: dataSkcLine,
+          backgroundColor: 'rgb(0,0,0)',
+          borderWidth: 0,
+          barPercentage: 0.02,
+          stack: 'skc'
+        },
+        {
+          label: 'hide',
+          data: dataVitcLine,
+          backgroundColor: 'rgb(0,0,0)',
+          borderWidth: 0,
+          barPercentage: 0.02,
+          stack: 'vitc'
+        }
+      ];
+
+      let containerCharts = document.getElementById('containerCharts');
+
+      let nameChart = 'chart' + this.countCharts.toString();
+
+      this.countCharts++;
+
+      let div = document.createElement("div");
+      div.setAttribute('style', "width: 1000px");
+      let canvas = document.createElement("canvas");
+      canvas.setAttribute('id', nameChart);
+      let textarea = document.createElement("textarea");
+      textarea.setAttribute('placeholder', 'Commentaires');
+
+      div.append(canvas);
+      div.append(textarea);
+      containerCharts.append(div);
+
+      let ctx = document.getElementById(nameChart).getContext('2d');
+
+      let chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['T0', 'Timme', 'T7', 'T14'],
+          datasets: datasetsSkc
+        },
+        options: {
+          scales: {
+            x: {
+              stacked: true
+            },
+            y: {
+              ticks: {
+                stepSize: 0.1
+              },
+              stacked: false
+            }
+          },
           plugins: {
             legend: {
               position: 'right',
