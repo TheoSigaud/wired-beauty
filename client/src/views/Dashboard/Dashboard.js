@@ -294,6 +294,20 @@ export default {
                 }
               }
             }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Time'
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'uA.V'
+              },
+            }
           }
         }
       });
@@ -421,13 +435,21 @@ export default {
         options: {
           scales: {
             x: {
-              stacked: true
+              stacked: true,
+              title: {
+                display: true,
+                text: 'Time'
+              },
             },
             y: {
               ticks: {
                 stepSize: 0.1
               },
-              stacked: false
+              stacked: false,
+              title: {
+                display: true,
+                text: 'uA.V'
+              },
             }
           },
           plugins: {
@@ -501,6 +523,20 @@ export default {
                   return !item.text.includes('hide');
                 }
               }
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Time'
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'uA.V'
+              },
             }
           }
         }
@@ -586,13 +622,21 @@ export default {
         options: {
           scales: {
             x: {
-              stacked: true
+              stacked: true,
+              title: {
+                display: true,
+                text: 'Time'
+              },
             },
             y: {
               ticks: {
                 stepSize: 0.1
               },
-              stacked: false
+              stacked: false,
+              title: {
+                display: true,
+                text: 'uA.V'
+              },
             }
           },
           plugins: {
