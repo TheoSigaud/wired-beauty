@@ -1,4 +1,4 @@
-import {getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword} from "firebase/auth";
+import {getAuth, onAuthStateChanged, signInWithEmailAndPassword} from "firebase/auth";
 
 const auth = getAuth();
 
@@ -52,9 +52,7 @@ export default {
       return false;
     },
 
-
     async loginUser() {
-
       signInWithEmailAndPassword(auth, this.email, this.password)
         .then((userCredential) => {
           onAuthStateChanged(auth, (user) => {
