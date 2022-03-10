@@ -87,7 +87,7 @@
                   </option>
                 </select>
                 <p v-if="errors.user" style="color: red">{{errors.y}}</p>
-
+                <pdf></pdf>
                 <button @click="generateGraph()">Générer le graphique</button>
               </div>
             </div>

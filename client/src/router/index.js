@@ -25,7 +25,7 @@ const router = new Router({
     {
       path: '/dashboard',
       component: Dashboard,
-      meta: {requiresAuth: true},
+      // meta: {requiresAuth: true},
       children: [
         {
           path: '',

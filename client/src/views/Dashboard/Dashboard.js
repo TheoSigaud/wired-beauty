@@ -1,8 +1,11 @@
 import DashboardService from '@/services/DashboardService';
+import Pdf from '../../components/Pdf/Pdf.vue';
 
 export default {
   name: "Dashboard",
-
+  components:{
+    Pdf
+  },
   data() {
     return {
       chart: null,
