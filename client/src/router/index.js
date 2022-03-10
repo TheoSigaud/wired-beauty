@@ -3,11 +3,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Navbar from '@/components/Navbar/Navbar.vue'
 import Login from '@/views/Login.vue'
-<<<<<<< HEAD
-=======
-import Admin from '@/views/Admin/Admin.vue'
-import Register from '@/views/Register/Register.vue'
->>>>>>> feature/admin
+import Admin from '@/views/Admin/Admin.vue' 
 import Users from '@/views/Users/Users.vue'
 import NewUser from '@/views/Users/NewUser/NewUser.vue'
 import Dashboard from '@/views/Dashboard/Dashboard.vue'
@@ -21,11 +17,6 @@ const router = new Router({
       path: '/',
       name: 'Login',
       component: Login
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      component: Register
     },
     {
       path: '/admin',
