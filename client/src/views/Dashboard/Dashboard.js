@@ -17,7 +17,8 @@ export default {
       typeOption: '',
       showSelection: false,
       showGenerate: false,
-      showAddGraph: false
+      showAddGraph: false,
+      showOption: false
     }
   },
 
@@ -47,19 +48,23 @@ export default {
     },
 
     async checkGenerate() {
+      if (this.typeChart === 'score') {
+        this.showOption = true;
+      }else {
+        this.showOption = false;
+      }
+
       if (this.typeChart !== ''
         && this.typeProduct !== ''
-        && this.typeOption !== '') {
+        && ((this.typeOption !== '' && this.showOption) || this.showOption === false)) {
         this.showGenerate = true;
+      }else {
+        this.showGenerate = false;
       }
     },
 
     async generateChart() {
-      switch (this.typeChart) {
-        case 'compare':
-          await this.dataChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, {header: 1}));
-          break
-      }
+      await this.dataChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, {header: 1}));
 
       this.typeChart = '';
       this.typeProduct = '';
@@ -74,11 +79,33 @@ export default {
       this.showSelection = true;
     },
 
+    //////////////////////
+    ////   CALCUL     ////
+    //////////////////////
+
+    async quartile(array, percentile) {
+      array.sort();
+      let index = (percentile/100) * array.length;
+      let result;
+      if (Math.ceil(index) === index) {
+        result = (array[(index-1)] + array[index])/2;
+      }
+      else {
+        result = array[Math.ceil(index)];
+      }
+      return result;
+    },
+
+    async thirdQuartile(array) {
+      console.log(Math.ceil(0.75*array.length))
+      console.log(array[Math.ceil(0.75*array.length)])
+      return array[Math.ceil(0.75*array.length)];
+    },
 
     //////////////////////////////
     //      COMPARE      ////
     //////////////////////////////
-    async dataChartLine(data) {
+    async dataChartLine(data, type) {
       let indexSkin = data[0].indexOf("score_skinbiosense");
       let indexTime = data[0].indexOf("session_id");
       let indexValue = data[0].indexOf("mesure");
@@ -169,8 +196,25 @@ export default {
       dataVitc.average.t7 = arrAvg(dataVitc.data.t7);
       dataVitc.average.t14 = arrAvg(dataVitc.data.t14);
 
-      await this.chartLine(dataSkc.average, dataVitc.average);
-      await this.chartCandle(dataSkc, dataVitc);
+
+      switch (this.typeChart) {
+        case 'compare':
+          await this.chartLine(dataSkc.average, dataVitc.average);
+          await this.chartCandle(dataSkc.data, dataVitc.data);
+          break;
+        case 'score':
+          switch (this.typeOption) {
+            case 'skc':
+              await this.chartLineScore(dataSkc.average, this.typeOption);
+              await this.chartCandleScore(dataSkc.data, this.typeOption);
+              break;
+            case 'vitc':
+              await this.chartLineScore(dataVitc.average, this.typeOption);
+              await this.chartCandleScore(dataVitc.data, this.typeOption);
+              break;
+          }
+          break;
+      }
     },
 
     async chartLine(skc, vitc) {
@@ -258,60 +302,61 @@ export default {
     },
 
     async chartCandle(skc, vitc) {
+
       let dataSkcLine = [
-        [Math.min(...skc.data.t0), Math.max(...skc.data.t0)],
-        [Math.min(...skc.data.timme), Math.max(...skc.data.timme)],
-        [Math.min(...skc.data.t7), Math.max(...skc.data.t7)],
-        [Math.min(...skc.data.t14), Math.max(...skc.data.t14)]
+        [Math.min(...skc.t0), Math.max(...skc.t0)],
+        [Math.min(...skc.timme), Math.max(...skc.timme)],
+        [Math.min(...skc.t7), Math.max(...skc.t7)],
+        [Math.min(...skc.t14), Math.max(...skc.t14)]
       ];
 
       let dataSkcBar = [
-        [skc.data.t0[0], skc.data.t0[skc.data.t0.length - 1]],
-        [skc.data.timme[0], skc.data.timme[skc.data.timme.length - 1]],
-        [skc.data.t7[0], skc.data.t7[skc.data.t7.length - 1]],
-        [skc.data.t14[0], skc.data.t14[skc.data.t14.length - 1]]
+        [await this.quartile(skc.t0, 25), await this.quartile(skc.t0, 75)],
+        [await this.quartile(skc.timme, 25), await this.quartile(skc.timme, 75)],
+        [await this.quartile(skc.t7, 25), await this.quartile(skc.t7, 75)],
+        [await this.quartile(skc.t14, 25), await this.quartile(skc.t14,75)]
       ];
 
-      let dataSkcAverage = [
-        [skc.average.t0, skc.average.t0],
-        [skc.average.timme, skc.average.timme],
-        [skc.average.t7, skc.average.t7],
-        [skc.average.t14, skc.average.t14]
+      let dataSkcMedian = [
+        [await this.quartile(skc.t0, 50), await this.quartile(skc.t0, 50)],
+        [await this.quartile(skc.timme, 50), await this.quartile(skc.timme, 50)],
+        [await this.quartile(skc.t7, 50), await this.quartile(skc.t7, 50)],
+        [await this.quartile(skc.t14, 50), await this.quartile(skc.t14, 50)]
       ];
 
       let dataVitcLine = [
-        [Math.min(...vitc.data.t0), Math.max(...vitc.data.t0)],
-        [Math.min(...vitc.data.timme), Math.max(...vitc.data.timme)],
-        [Math.min(...vitc.data.t7), Math.max(...vitc.data.t7)],
-        [Math.min(...vitc.data.t14), Math.max(...vitc.data.t14)]
+        [Math.min(...vitc.t0), Math.max(...vitc.t0)],
+        [Math.min(...vitc.timme), Math.max(...vitc.timme)],
+        [Math.min(...vitc.t7), Math.max(...vitc.t7)],
+        [Math.min(...vitc.t14), Math.max(...vitc.t14)]
       ];
 
       let dataVitcBar = [
-        [vitc.data.t0[0], vitc.data.t0[vitc.data.t0.length - 1]],
-        [vitc.data.timme[0], vitc.data.timme[vitc.data.timme.length - 1]],
-        [vitc.data.t7[0], vitc.data.t7[vitc.data.t7.length - 1]],
-        [vitc.data.t14[0], vitc.data.t14[vitc.data.t14.length - 1]]
+        [await this.quartile(vitc.t0, 25), await this.quartile(vitc.t0, 75)],
+        [await this.quartile(vitc.timme, 25), await this.quartile(vitc.timme, 75)],
+        [await this.quartile(vitc.t7, 25), await this.quartile(vitc.t7, 75)],
+        [await this.quartile(vitc.t14, 25), await this.quartile(vitc.t14, 75)]
       ];
 
-      let dataVitcAverage = [
-        [vitc.average.t0, vitc.average.t0],
-        [vitc.average.timme, vitc.average.timme],
-        [vitc.average.t7, vitc.average.t7],
-        [vitc.average.t14, vitc.average.t14]
+      let dataVitcMedian = [
+        [await this.quartile(vitc.t0, 50), await this.quartile(vitc.t0, 50)],
+        [await this.quartile(vitc.timme, 50), await this.quartile(vitc.timme, 50)],
+        [await this.quartile(vitc.t7, 50), await this.quartile(vitc.t7,50)],
+        [await this.quartile(vitc.t14, 50), await this.quartile(vitc.t14, 50)]
       ];
 
 
       const datasetsSkc = [
         {
           label: 'hide',
-          data: dataSkcAverage,
+          data: dataSkcMedian,
           backgroundColor: 'rgb(0,0,0)',
           minBarLength: 3,
           stack: 'skc'
         },
         {
           label: 'hide',
-          data: dataVitcAverage,
+          data: dataVitcMedian,
           backgroundColor: 'rgb(0,0,0)',
           minBarLength: 3,
           stack: 'vitc'
@@ -372,6 +417,171 @@ export default {
         data: {
           labels: ['T0', 'Timme', 'T7', 'T14'],
           datasets: datasetsSkc
+        },
+        options: {
+          scales: {
+            x: {
+              stacked: true
+            },
+            y: {
+              ticks: {
+                stepSize: 0.1
+              },
+              stacked: false
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                filter: function (item, chart) {
+                  return !item.text.includes('hide');
+                }
+              }
+            }
+          }
+        }
+      });
+
+      this.charts.push(chart.toBase64Image());
+    },
+
+
+
+    ///////////////////////
+    ////   Score       ////
+    ///////////////////////
+
+
+    async chartLineScore(value, type) {
+      let data = [value.t0, value.timme, value.t7, value.t14];
+
+      const datasets = [
+        {
+          label: type,
+          data: data,
+          borderColor: '#c03522',
+          pointBackgroundColor: '#c03522',
+          borderWidth: 1,
+          pointRadius: 5,
+          pointHoverRadius: 10,
+          order: 0
+        }
+      ];
+
+      let containerCharts = document.getElementById('containerCharts');
+
+      let nameChart = 'chart' + this.countCharts.toString();
+
+      this.countCharts++;
+
+      let div = document.createElement("div");
+      div.setAttribute('style', "width: 1000px");
+      let canvas = document.createElement("canvas");
+      canvas.setAttribute('id', nameChart);
+
+      div.append(canvas);
+      containerCharts.append(div);
+
+      let ctx = document.getElementById(nameChart).getContext('2d');
+
+      let chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['T0', 'Timme', 'T7', 'T14'],
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                filter: function (item, chart) {
+                  return !item.text.includes('hide');
+                }
+              }
+            }
+          }
+        }
+      });
+
+      this.charts.push(chart.toBase64Image());
+    },
+
+    async chartCandleScore(value, type) {
+
+      let dataLine = [
+        [Math.min(...value.t0), Math.max(...value.t0)],
+        [Math.min(...value.timme), Math.max(...value.timme)],
+        [Math.min(...value.t7), Math.max(...value.t7)],
+        [Math.min(...value.t14), Math.max(...value.t14)]
+      ];
+
+      let dataBar = [
+        [await this.quartile(value.t0, 25), await this.quartile(value.t0, 75)],
+        [await this.quartile(value.timme, 25), await this.quartile(value.timme, 75)],
+        [await this.quartile(value.t7, 25), await this.quartile(value.t7, 75)],
+        [await this.quartile(value.t14, 25), await this.quartile(value.t14,75)]
+      ];
+
+      let dataMedian = [
+        [await this.quartile(value.t0, 50), await this.quartile(value.t0, 50)],
+        [await this.quartile(value.timme, 50), await this.quartile(value.timme, 50)],
+        [await this.quartile(value.t7, 50), await this.quartile(value.t7, 50)],
+        [await this.quartile(value.t14, 50), await this.quartile(value.t14, 50)]
+      ];
+
+
+      const datasets = [
+        {
+          label: 'hide',
+          data: dataMedian,
+          backgroundColor: 'rgb(0,0,0)',
+          minBarLength: 3,
+          stack: type
+        },
+        {
+          label: 'Skc',
+          data: dataBar,
+          backgroundColor: 'rgb(190,45,45)',
+          borderWidth: 0,
+          stack: type
+        },
+        {
+          label: 'hide',
+          data: dataLine,
+          backgroundColor: 'rgb(0,0,0)',
+          borderWidth: 0,
+          barPercentage: 0.02,
+          stack: type
+        }
+      ];
+
+      let containerCharts = document.getElementById('containerCharts');
+
+      let nameChart = 'chart' + this.countCharts.toString();
+
+      this.countCharts++;
+
+      let div = document.createElement("div");
+      div.setAttribute('style', "width: 1000px");
+      let canvas = document.createElement("canvas");
+      canvas.setAttribute('id', nameChart);
+      let textarea = document.createElement("textarea");
+      textarea.setAttribute('placeholder', 'Commentaires');
+
+      div.append(canvas);
+      div.append(textarea);
+      containerCharts.append(div);
+
+      let ctx = document.getElementById(nameChart).getContext('2d');
+
+      let chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['T0', 'Timme', 'T7', 'T14'],
+          datasets: datasets
         },
         options: {
           scales: {

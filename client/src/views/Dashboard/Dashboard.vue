@@ -32,12 +32,14 @@
         <option value="3">Barrière (3)</option>
       </select>
 
-      <label>Option</label>
-      <select v-model="typeOption" @change="checkGenerate()">
-        <option disabled value="">Choisissez</option>
-        <option value="time">Temps (T0, T1)</option>
-        <option value="disperse">Dispertion (SKC, VITC)</option>
-      </select>
+      <div v-if="showOption">
+        <label>Option</label>
+        <select v-model="typeOption" @change="checkGenerate()">
+          <option disabled value="">Choisissez</option>
+          <option value="skc">Skc</option>
+          <option value="vitc">Vitc</option>
+        </select>
+      </div>
     </div>
 
     <button v-if="showGenerate" @click="generateChart()">Générer le graphique</button>
