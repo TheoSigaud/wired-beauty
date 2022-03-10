@@ -7,98 +7,44 @@
         <div class="col-sm-6">
           <div class="card">
             <div class="card-body">
-              <input type="file" accept=".csv" @change="uploadFile">
+              <input type="file" accept=".xlsx" @change="uploadFile">
               <button @click="upload()">Upload</button>
-              <p v-if="errorUpload" style="color: red">{{errorUpload}}</p>
+              <p v-if="errorUpload" style="color: red">{{ errorUpload }}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="showSelectChart">
-      <div class="container mt-5" @click="selectChart('bar')">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <img src="@/assets/vertical-chart.png" width="80%">
-                <p style="color: black">Vertical bar</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div style="color: white" v-if="showSelection">
+      <label>Type du graphique</label>
+      <select v-model="typeChart" @change="checkGenerate()">
+        <option disabled value="">Choisissez</option>
+        <option value="compare">Comparaison</option>
+        <option value="score">Score</option>
+      </select>
 
-      <div class="container mt-5" @click="selectChart('line')">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <img src="@/assets/line-chart.png" width="80%">
-                <p style="color: black">Line chart</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <label>Produit</label>
+      <select v-model="typeProduct" @change="checkGenerate()">
+        <option disabled value="">Choisissez</option>
+        <option value="1">Anti-oxidant (1)</option>
+        <option value="2">Hydratant (2)</option>
+        <option value="3">Barrière (3)</option>
+      </select>
 
-      <div class="container mt-5" @click="selectChart('scatter')">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <img src="@/assets/scatter-chart.png" width="80%">
-                <p style="color: black">Scatter chart</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <label>Option</label>
+      <select v-model="typeOption" @change="checkGenerate()">
+        <option disabled value="">Choisissez</option>
+        <option value="time">Temps (T0, T1)</option>
+        <option value="disperse">Dispertion (SKC, VITC)</option>
+      </select>
     </div>
 
-    <div v-if="showSelectAxes">
-      <div class="container mt-5">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <p style="color: black">User id</p>
-                <select v-model="selectUserId">
-                  <option value="all">Tout</option>
-                  <option v-for="userId in usersId" :value="userId" :key="userId">
-                    {{ userId }}
-                  </option>
-                </select>
-                <p v-if="errors.user" style="color: red">{{errors.user}}</p>
+    <button v-if="showGenerate" @click="generateChart()">Générer le graphique</button>
 
-                <p style="color: black">Axe X</p>
-                <select v-model="axisX">
-                  <option v-for="title in titles" :value="title" :key="title">
-                    {{ title }}
-                  </option>
-                </select>
-                <p v-if="errors.user" style="color: red">{{errors.x}}</p>
+    <button v-if="showAddGraph" @click="addGraph()">Ajouter un graphique</button>
 
-                <p style="color: black">Axe Y</p>
-                <select v-model="axisY">
-                  <option v-for="title in titles" :value="title" :key="title">
-                    {{ title }}
-                  </option>
-                </select>
-                <p v-if="errors.user" style="color: red">{{errors.y}}</p>
-
-                <button @click="generateGraph()">Générer le graphique</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button @click="addGraph()">Ajouter le graphique au rapport</button>
-    <div style="width: 1400px; height: 500px">
-      <canvas id="graph"></canvas>
-    </div>
+    <div id="containerCharts"></div>
   </div>
 </template>
 
