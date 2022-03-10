@@ -21,13 +21,6 @@ const router = new Router({
       path: '/dashboard',
       component: Dashboard,
       // meta: {requiresAuth: true},
-      children: [
-        {
-          path: '',
-          name: 'Dashboard',
-          component: Navbar
-        }
-      ]
     },
     {
       path: '/users',
