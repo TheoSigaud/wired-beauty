@@ -1,5 +1,5 @@
 import UsersService from '@/services/UsersService'
-import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {getAuth, onAuthStateChanged, sendPasswordResetEmail} from "firebase/auth";
 const auth = getAuth();
 
 export default {
@@ -26,6 +26,19 @@ export default {
           this.getUsers();
         });
       });
+    },
+
+    async resetPassword(email) {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          // Password reset email sent!
+          // ..
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+
     }
   }
 }

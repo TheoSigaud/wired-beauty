@@ -77,12 +77,20 @@ router.beforeEach((to, from, next) => {
       if (!user) {
         next('/')
       } else {
-        if (user.email === 'wired@gmail.com') {
-          next()
-        } else if (to.name === 'Report' || to.name === 'Login') {
-          next()
-        } else {
-          next('/report')
+        switch (user.email) {
+          case 'wired@gmail.com':
+            if (to.name === 'Report') {
+              next('/')
+              break;
+            }
+            next()
+            break;
+          default:
+            if (to.name === 'Report' || to.name === 'Login') {
+              next()
+            } else {
+              next('/report')
+            }
         }
       }
     } else {

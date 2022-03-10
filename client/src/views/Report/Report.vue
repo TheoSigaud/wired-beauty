@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view/>
-    <h1>Report</h1>
+    <h1>Vos rapports</h1>
   </div>
 </template>
 

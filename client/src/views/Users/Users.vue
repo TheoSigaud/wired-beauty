@@ -12,6 +12,7 @@
         </tr>
         <tr v-bind:key="user.id" v-for="user in users">
           <td style="color: white">{{ user.email }}</td>
+          <td><button @click="resetPassword(user.email)">Réinitialiser le mot de passe</button></td>
           <td><button @click="deleteUser(user.uid)">Supprimer</button></td>
         </tr>
       </table>

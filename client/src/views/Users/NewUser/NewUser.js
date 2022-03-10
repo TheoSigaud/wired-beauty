@@ -48,7 +48,7 @@ export default {
           })
       }
 
-      if (!response.success) {
+      if (response.success === false) {
         this.errors.register = 'Un compte avec cette email existe déjà';
       }
 
