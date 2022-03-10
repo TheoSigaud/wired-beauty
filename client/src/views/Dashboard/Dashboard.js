@@ -1,14 +1,23 @@
 import DashboardService from '@/services/DashboardService';
 import * as XLSX from 'xlsx/xlsx.mjs';
+import {empty} from "nightwatch/lib/core/queue";
 
 export default {
   name: "Dashboard",
 
   data() {
     return {
-      chart: null,
+      charts: [],
+      countCharts: 0,
       file: null,
       errorUpload: null,
+      workbook: null,
+      typeChart: '',
+      typeProduct: '',
+      typeOption: '',
+      showSelection: false,
+      showGenerate: false,
+      showAddGraph: false
     }
   },
 
@@ -20,15 +29,54 @@ export default {
     },
 
     async upload() {
-      const data = await this.file.arrayBuffer();
-      const workbook = XLSX.read(data);
+      this.charts = [];
+      this.typeChart = '';
+      this.typeProduct = '';
+      this.typeOption = '';
+      this.showSelection = false;
+      this.showGenerate = false;
+      this.showAddGraph = false;
 
-      await this.dataMoisturizingChartLine(XLSX.utils.sheet_to_json(workbook.Sheets.Vivo, { header: 1 }));
+      let containerCharts = document.getElementById('containerCharts');
+      containerCharts.innerHTML = '';
+
+      let data = await this.file.arrayBuffer();
+      this.workbook = XLSX.read(data);
+
+      this.showSelection = true;
+    },
+
+    async checkGenerate() {
+      if (this.typeChart !== ''
+        && this.typeProduct !== ''
+        && this.typeOption !== ''){
+        this.showGenerate = true;
+      }
+    },
+
+    async generateChart() {
+      switch (this.typeChart) {
+        case 'compare':
+          await this.dataMoisturizingChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.Vivo, { header: 1 }));
+          break
+      }
+
+      this.typeChart = '';
+      this.typeProduct = '';
+      this.typeOption = '';
+      this.showSelection = false;
+      this.showGenerate = false;
+
+      this.showAddGraph = true;
+    },
+
+    async addGraph() {
+      this.showSelection = true;
     },
 
 
     //////////////////////////////
-    //      MOISTURIZING      ////
+    //      COMPARE      ////
     //////////////////////////////
     async dataMoisturizingChartLine(data) {
         let indexSkin = data[0].indexOf("score_skinbiosense");
@@ -54,7 +102,7 @@ export default {
 
         data.forEach(element => {
           if (element[0] !== undefined) {
-            if (element[indexSkin] === 2) {
+            if (element[indexSkin] === Number(this.typeProduct)) {
               switch (element[indexProduct]) {
                 case 417432:
                   switch (element[indexTime]) {
@@ -109,10 +157,10 @@ export default {
     },
 
     async moisturizingChartLine(skc, vitc) {
-      const dataSkc = [skc.t0, skc.timme, skc.t7, skc.t14];
-      const dataVitc = [vitc.t0, vitc.timme, vitc.t7, vitc.t14];
+      let dataSkc = [skc.t0, skc.timme, skc.t7, skc.t14];
+      let dataVitc = [vitc.t0, vitc.timme, vitc.t7, vitc.t14];
 
-      const dataBetween = []
+      let dataBetween = []
 
       for (let i = 0; i < dataSkc.length; i++) {
         dataBetween.push([dataVitc[i], dataSkc[i]]);
@@ -153,9 +201,23 @@ export default {
         }
       ];
 
+      let containerCharts = document.getElementById('containerCharts');
 
-      let ctx = document.getElementById('moisturizingChartLine').getContext('2d'); //Structure du graphique chiffre d'affaires
-      this.chart = new Chart(ctx, {
+      let nameChart = 'chart'+this.countCharts.toString();
+
+      this.countCharts++;
+
+      let div = document.createElement("div");
+      div.setAttribute('style', "width: 1000px");
+      let canvas = document.createElement("canvas");
+      canvas.setAttribute('id', nameChart);
+
+      div.append(canvas);
+      containerCharts.append(div);
+
+      let ctx = document.getElementById(nameChart).getContext('2d');
+
+      let chart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: ['T0', 'Timme', 'T7', 'T14'],
@@ -168,14 +230,15 @@ export default {
               position: 'right',
               labels: {
                 filter: function (item, chart) {
-                  // Logic to remove a particular legend item goes here
                   return !item.text.includes('hide');
                 }
               }
             }
           }
         }
-      })
+      });
+
+      this.charts.push(chart.toBase64Image());
     }
   }
 }
