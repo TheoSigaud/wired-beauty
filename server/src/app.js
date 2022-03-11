@@ -142,6 +142,19 @@ app.post('/api/save-pdf', (req, res) => {
     // res.send({
     //     pdf: req.body.pdf
     // })
+})
+
+
+//List all pdf
+app.get('/api/pdf', (req, res) => {
+    Pdf.find({}, 'name pdf', function (error, pdf) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            pdf: pdf
+        })
+    }).sort({_id: -1})
 });
 
 function generatePwd() {

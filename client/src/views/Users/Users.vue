@@ -5,7 +5,7 @@
     <h1>Users</h1>
     <router-link v-bind:to="{ name: 'NewUser' }" class="btn time-button__green mb-5">Crétion d'un client
     </router-link>
-    <div v-if="users.length > 0" class="table-wrap">
+    <div class="table-wrap">
       <table id="table" class="row-border hover">
         <thead>
         <tr>
@@ -23,9 +23,6 @@
         </tr>
         </tbody>
       </table>
-    </div>
-    <div v-else>
-      <p>Il n'y a pas de clients</p>
     </div>
   </div>
 </template>
