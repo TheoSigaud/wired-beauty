@@ -5,20 +5,24 @@
     <h1>Users</h1>
     <router-link v-bind:to="{ name: 'NewUser' }" class="btn time-button__green mb-5">Crétion d'un client
     </router-link>
-    <div v-if="users.length > 0" class="table-wrap">
-      <table>
+    <div class="table-wrap">
+      <table id="table" class="row-border hover">
+        <thead>
         <tr>
-          <td>email</td>
+          <th>Email</th>
+          <th>Actions</th>
         </tr>
+        </thead>
+        <tbody>
         <tr v-bind:key="user.id" v-for="user in users">
           <td style="color: white">{{ user.email }}</td>
-          <td><button @click="resetPassword(user.email)">Réinitialiser le mot de passe</button></td>
-          <td><button @click="deleteUser(user.uid)">Supprimer</button></td>
+          <td>
+            <button @click="resetPassword(user.email)">Réinitialiser le mot de passe</button>
+            <button @click="deleteUser(user.uid)">Supprimer</button>
+          </td>
         </tr>
+        </tbody>
       </table>
-    </div>
-    <div v-else>
-      <p>Il n'y a pas de clients</p>
     </div>
   </div>
 </template>

@@ -1,16 +1,14 @@
-import UsersService from '@/services/UsersService'
-import {getAuth, onAuthStateChanged, sendPasswordResetEmail} from "firebase/auth";
-const auth = getAuth();
+import PdfService from '@/services/PdfService'
 
 export default {
-  name: 'Users',
+  name: 'Pdf',
   data () {
     return {
-      users: []
+      pdf: []
     }
   },
   mounted () {
-    this.getUsers().then(() => {
+    this.getPdf().then(() => {
       $(document).ready(function () {
         $('#table').DataTable({
           responsive: true,
@@ -34,34 +32,29 @@ export default {
       });
     })
   },
-
   methods: {
-    async getUsers () {
-      const response = await UsersService.fetchUsers()
-      this.users = response.data.users
+    async getPdf () {
+      const response = await PdfService.fetchPdf()
+      this.pdf = response.data.pdf
     },
 
-    async deleteUser(uid) {
-      onAuthStateChanged(auth, (user) => {
-        UsersService.deleteUser({
-          uid: uid
+    async deletePdf(name) {
+        PdfService.deletePdf({
+          name: name
         }).then(() => {
-          this.getUsers();
+          this.getPdf();
         });
-      });
     },
 
-    async resetPassword(email) {
-      sendPasswordResetEmail(auth, email)
-        .then(() => {
-          // Password reset email sent!
-          // ..
+    async showReport(pdf) {
+      fetch(pdf)
+        .then(res => res.blob())
+        .then((blob) => {
+          window.open(
+            URL.createObjectURL(blob),
+            "blank",
+          );
         })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
-
     }
   }
 }
