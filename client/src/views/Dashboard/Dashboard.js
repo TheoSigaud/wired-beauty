@@ -35,18 +35,18 @@ export default {
     async uploadFile(e) {
       this.file = e.target.files[0];
       this.errorUpload = null;
+      document.getElementById('NameFileUploaded').innerHTML = e.target.files[0]['name'];
     },
 
     async upload() {
       this.charts = [];
       this.typeChart = '';
       this.typeProduct = '';
-      this.typeOption = '';
+      this.typeOption = ''; 
       this.showSelection = false;
       this.showGenerate = false;
-      this.showAddGraph = false;
-      this.pdfValues = [];
-
+      this.showAddGraph = false;  
+      this.pdfValues = []; 
       let containerCharts = document.getElementById('containerCharts');
       containerCharts.innerHTML = '';
 
@@ -59,8 +59,12 @@ export default {
     async checkGenerate() {
       if (this.typeChart === 'score') {
         this.showOption = true;
+        this.showScore = true;
+        this.showCompare = false;
       }else {
         this.showOption = false;
+        this.showCompare = true;
+        this.showScore = false;
       }
 
       if (this.typeChart !== ''
@@ -69,7 +73,8 @@ export default {
         this.showGenerate = true;
       }else {
         this.showGenerate = false;
-      }
+      } 
+
     },
 
     async generateChart() {
@@ -82,9 +87,9 @@ export default {
       this.typeProduct = '';
       this.typeOption = '';
       this.showSelection = false;
-      this.showGenerate = false;
+      this.showGenerate = false; 
 
-      this.showAddGraph = true;
+      this.showAddGraph = true; 
     },
 
     async addGraph() {

@@ -4,20 +4,49 @@
     <router-view />
     <div id="content-wrapper" class="d-flex flex-column">
       <div class="container-fluid">
-        <div class="d-sm-flex align-items-center justify-content-center m-4">
-          <label class="custom-file-upload m-3">
-            <input type="file" accept=".xlsx" @change="uploadFile" />
-            <i class="fas fa-upload"></i> Import your file
-          </label>
-
-          <button class="btn btn-primary" @click="upload()">Upload</button>
+        <div
+          class="d-sm-flex align-items-center justify-content-between m-4 ml-5"
+        >
+          <h1 class="h3 mb-0 text-gray-800">Report Builder</h1>
         </div>
-        <div class="d-sm-flex align-items-center justify-content-center">
-          <p>Format accepted : .xlsx</p>
+        <div
+          class="row d-sm-flex align-items-center justify-content-center m-0"
+        >
+          <div class="col-md-9 ml-5">
+            <h4>Step 1 : Import your file</h4>
+          </div>
+          <div class="col-md-3">
+            <label class="custom-file-upload m-1">
+              <input type="file" accept=".xlsx" @change="uploadFile" />
+              <i class="fas fa-upload"></i> Import your file
+            </label>
+            <button class="btn btn-primary shadow-sm" @click="upload()">
+              Upload
+            </button>
+          </div>
+        </div>
+        <div
+          class="d-sm-flex align-items-center justify-content-center m-0"
+        >
+          <p>Format of file : .xlsx</p>
+        </div>
+        <div
+          class="d-sm-flex align-items-center justify-content-center m-0"
+        >
+          <span id="NameFileUploaded"></span>
+        </div>
+        <div
+          class="d-sm-flex align-items-center justify-content-center m-0"
+        >
           <p v-if="errorUpload" style="color: red">{{ errorUpload }}</p>
         </div>
-        <div class="row align-items-center justify-content-center" v-if="showSelection">
-          <div class="col-xl-2 col-md-4 mb-4">
+        <div class="row align-items-center justify-content-center">
+          <h4 class="col-md-9 m-5" v-if="showSelection">
+            Step 2 : Select the data you want in the report
+          </h4>
+        </div>
+        <div class="row align-items-center justify-content-center">
+          <div class="col-xl-4 col-md-4 mb-2" v-if="showSelection">
             <label>Type du graphique</label>
             <select
               class="form-select"
@@ -30,7 +59,7 @@
               <option value="score">Score</option>
             </select>
           </div>
-          <div class="col-xl-2 col-md-4 mb-4">
+          <div class="col-xl-4 col-md-4 mb-2" v-if="showSelection">
             <label>Produit</label>
             <select
               class="form-select"
@@ -39,12 +68,12 @@
               @change="checkGenerate()"
             >
               <option disabled value="">Choisissez</option>
-              <option value="1">Anti-oxydant (1)</option>
-              <option value="2">Hydratant (2)</option>
+              <option value="1">Hydratant (1)</option>
+              <option value="2">Anti-Oxydant (2)</option>
               <option value="3">Barrière (3)</option>
             </select>
           </div>
-          <div class="col-xl-2 col-md-4 mb-4" v-if="showOption">
+          <div class="col-xl-4 col-md-4 mb-2" v-if="showOption">
             <label>Option</label>
             <select
               class="form-select"
