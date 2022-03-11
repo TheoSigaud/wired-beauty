@@ -433,7 +433,7 @@ export default {
 
       const datasetsSkc = [
         {
-          label: 'hidtffeee',
+          label: 'hide',
           data: dataSkcAbr,
           backgroundColor: 'rgb(148,195,114)',
           borderColor: 'rgb(59,170,118)',
@@ -463,7 +463,7 @@ export default {
           stack: 'skc'
         },
         {
-          label: 'hidhe',
+          label: 'hide',
           data: dataVitcAbr,
           backgroundColor: 'rgb(195,114,176)',
           borderColor: 'rgb(59,170,118)',
