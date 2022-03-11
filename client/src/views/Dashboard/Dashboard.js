@@ -22,9 +22,11 @@ export default {
       showGenerate: false,
       showAddGraph: false,
       showOption: false,
+      showCompare: false,
+      showScore: false,
       pdfValues: [],
-      label1: '',
-      label2: ''
+      label1:'',
+      label2:''
     }
   },
 
