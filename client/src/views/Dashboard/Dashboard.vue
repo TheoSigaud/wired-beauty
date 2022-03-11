@@ -1,5 +1,4 @@
 <template>
-
   <div id="wrapper">
     <Navbar></Navbar>
     <router-view />
@@ -17,8 +16,8 @@
           <p>Format accepted : .xlsx</p>
           <p v-if="errorUpload" style="color: red">{{ errorUpload }}</p>
         </div>
-        <div class="row align-items-center justify-content-center">
-          <div class="col-xl-2 col-md-4 mb-4" v-if="showSelection">
+        <div class="row align-items-center justify-content-center" v-if="showSelection">
+          <div class="col-xl-2 col-md-4 mb-4">
             <label>Type du graphique</label>
             <select
               class="form-select"
@@ -31,7 +30,7 @@
               <option value="score">Score</option>
             </select>
           </div>
-          <div class="col-xl-2 col-md-4 mb-4" v-if="showSelection">
+          <div class="col-xl-2 col-md-4 mb-4">
             <label>Produit</label>
             <select
               class="form-select"
@@ -45,7 +44,7 @@
               <option value="3">Barrière (3)</option>
             </select>
           </div>
-          <div class="col-xl-2 col-md-4 mb-4" v-if="showSelection">
+          <div class="col-xl-2 col-md-4 mb-4" v-if="showOption">
             <label>Option</label>
             <select
               class="form-select"
@@ -54,8 +53,8 @@
               @change="checkGenerate()"
             >
               <option disabled value="">Choisissez</option>
-              <option value="time">Temps (T0, T1)</option>
-              <option value="disperse">Dispertion (SKC, VITC)</option>
+              <option value="skc">Skc</option>
+              <option value="vitc">Vitc</option>
             </select>
           </div>
         </div>

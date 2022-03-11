@@ -7,6 +7,7 @@ import Admin from '@/views/Admin/Admin.vue'
 import Users from '@/views/Users/Users.vue'
 import NewUser from '@/views/Users/NewUser/NewUser.vue'
 import Dashboard from '@/views/Dashboard/Dashboard.vue'
+import Report from '@/views/Report/Report.vue'
 
 Vue.use(Router)
 
@@ -21,13 +22,14 @@ const router = new Router({
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
-      // meta: {requiresAuth: true},
+      component: Admin,
+      meta: {requiresAuth: true}
     },
     {
       path: '/dashboard',
-      component: Dashboard
-      // meta: {requiresAuth: true},
+      component: Dashboard,
+      name: 'Dashboard',
+      meta: {requiresAuth: true}
     },
     {
       path: '/users',
@@ -52,7 +54,20 @@ const router = new Router({
           component: Navbar
         }
       ]
-    }
+    },
+    {
+      path: '/report',
+      component: Report,
+      meta: {requiresAuth: true},
+      children: [
+        {
+          path: '',
+          name: 'Report',
+          component: Navbar
+        }
+      ]
+    },
+    { path: '*', component: Login }
   ]
 })
 
@@ -63,7 +78,21 @@ router.beforeEach((to, from, next) => {
       if (!user) {
         next('/')
       } else {
-        next()
+        switch (user.email) {
+          case 'wired@gmail.com':
+            if (to.name === 'Report') {
+              next('/')
+              break
+            }
+            next()
+            break
+          default:
+            if (to.name === 'Report' || to.name === 'Login') {
+              next()
+            } else {
+              next('/report')
+            }
+        }
       }
     } else {
       next()

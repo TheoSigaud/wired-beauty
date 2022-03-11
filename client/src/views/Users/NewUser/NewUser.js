@@ -1,4 +1,4 @@
-import {getAuth, sendPasswordResetEmail, createUserWithEmailAndPassword} from "firebase/auth";
+import {getAuth, sendPasswordResetEmail} from "firebase/auth";
 import UsersService from '@/services/UsersService';
 
 export default {
@@ -48,7 +48,7 @@ export default {
           })
       }
 
-      if (!response.success) {
+      if (response.success === false) {
         this.errors.register = 'Un compte avec cette email existe déjà';
       }
 
