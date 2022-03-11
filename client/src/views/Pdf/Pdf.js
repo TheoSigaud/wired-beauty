@@ -35,7 +35,7 @@ export default {
   methods: {
     async getPdf () {
       const response = await PdfService.fetchPdf()
-      this.pdf = response.data.users
+      this.pdf = response.data.pdf
     },
 
     async deleteUser(uid) {
@@ -45,5 +45,16 @@ export default {
         //   this.getUsers();
         // });
     },
+
+    async showReport(pdf) {
+      fetch(pdf)
+        .then(res => res.blob())
+        .then((blob) => {
+          window.open(
+            URL.createObjectURL(blob),
+            "blank",
+          );
+        })
+    }
   }
 }

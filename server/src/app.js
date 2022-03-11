@@ -125,8 +125,8 @@ app.post('/api/save-pdf', (req, res) => {
     let name = req.body.name;
 
     const new_pdf = new Pdf({
-        pdf: pdf,
-        name: name
+        name: name,
+        pdf: pdf
     })
 
     new_pdf.save(function (error) {

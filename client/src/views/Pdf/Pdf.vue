@@ -15,7 +15,7 @@
         <tr v-bind:key="pdf.id" v-for="pdf in pdf">
           <td style="color: white">{{ pdf.name }}</td>
           <td>
-<!--            <button @click="resetPassword(pdf.email)">Réinitialiser le mot de passe</button>-->
+            <button @click="showReport(pdf.pdf)">Voir</button>
 <!--            <button @click="deleteUser(pdf.uid)">Supprimer</button>-->
           </td>
         </tr>
