@@ -43,7 +43,7 @@
                 <tr v-bind:key="user.id" v-for="user in users">
                   <td style="color: white">{{ user.email }}</td>
                   <td>
-                    <button @click="addUser(user.email)">Choisir</button>
+                    <button data-bs-dismiss="modal" @click="addUser(user.email)">Choisir</button>
                   </td>
                 </tr>
                 </tbody>

@@ -106,11 +106,6 @@ export default {
       return result;
     },
 
-    async thirdQuartile(array) {
-      console.log(Math.ceil(0.75*array.length))
-      console.log(array[Math.ceil(0.75*array.length)])
-      return array[Math.ceil(0.75*array.length)];
-    },
 
     //////////////////////////////
     //      COMPARE      ////

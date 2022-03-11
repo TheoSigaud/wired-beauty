@@ -90,8 +90,13 @@ export default {
         })
     },
 
-    async addUser(name) {
-
+    async addUser(email) {
+      PdfService.pdfUser({
+        email: email,
+        name: this.namePdf
+      }).then(() => {
+        this.getPdf();
+      });
     }
   }
 }
