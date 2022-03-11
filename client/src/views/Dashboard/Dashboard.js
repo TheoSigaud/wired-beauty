@@ -1,5 +1,4 @@
 import * as XLSX from 'xlsx/xlsx.mjs';
-import { empty } from "nightwatch/lib/core/queue";
 import Pdf from '../../components/Pdf/Pdf.vue';
 import Navbar from '../../components/Navbar/Navbar.vue';
 
@@ -23,9 +22,9 @@ export default {
       showGenerate: false,
       showAddGraph: false,
       showOption: false,
-      pdfValues: this.pdfValues,
-      label1: this.label1,
-      label2: this.label2
+      pdfValues: [],
+      label1: '',
+      label2: ''
     }
   },
 
@@ -229,11 +228,12 @@ export default {
     },
 
     async chartLine(skc, vitc) {
+      let tmpPdf = [];
+
       let dataSkc = [skc.t0, skc.timme, skc.t7, skc.t14];
       let dataVitc = [vitc.t0, vitc.timme, vitc.t7, vitc.t14];
 
       let dataBetween = []
-      let pdfValues = []
 
       for (let i = 0; i < dataSkc.length; i++) {
         dataBetween.push([dataVitc[i], dataSkc[i]]);
@@ -299,6 +299,11 @@ export default {
           datasets: datasetsSkc
         },
         options: {
+          animation: {
+            onComplete: function () {
+              tmpPdf.push(this.toBase64Image())
+            }
+          },
           responsive: true,
           plugins: {
             legend: {
@@ -327,10 +332,11 @@ export default {
         }
       });
 
-      this.charts.push(chart.toBase64Image());
+      this.pdfValues.push(tmpPdf);
     },
 
     async chartCandle(skc, vitc) {
+      let tmpPdf = [];
 
       let dataSkcLine = [
         [Math.min(...skc.t0), Math.max(...skc.t0)],
@@ -516,6 +522,11 @@ export default {
           datasets: datasetsSkc
         },
         options: {
+          animation: {
+            onComplete: function () {
+              tmpPdf.push(this.toBase64Image())
+            }
+          },
           scales: {
             x: {
               stacked: true,
@@ -548,7 +559,7 @@ export default {
         }
       });
 
-      this.charts.push(chart.toBase64Image());
+      this.pdfValues.push(tmpPdf);
     },
 
 
@@ -559,6 +570,8 @@ export default {
 
 
     async chartLineScore(value, type) {
+      let tmpPdf = [];
+
       let data = [value.t0, value.timme, value.t7, value.t14];
 
       const datasets = [
@@ -599,7 +612,7 @@ export default {
         options: {
           animation: {
             onComplete: function () {
-              pdfValues.push(this.toBase64Image())
+              tmpPdf.push(this.toBase64Image())
             }
           },
           responsive: true,
@@ -630,10 +643,11 @@ export default {
         }
       });
 
-      this.charts.push(chart.toBase64Image());
+      this.pdfValues.push(tmpPdf);
     },
 
     async chartCandleScore(value, type) {
+      let tmpPdf = [];
 
       let dataLine = [
         [Math.min(...value.t0), Math.max(...value.t0)],
@@ -708,6 +722,11 @@ export default {
           datasets: datasets
         },
         options: {
+          animation: {
+            onComplete: function () {
+              tmpPdf.push(this.toBase64Image())
+            }
+          },
           scales: {
             x: {
               stacked: true,
@@ -739,8 +758,7 @@ export default {
           }
         }
       });
-      this.charts.push(chart.toBase64Image());
-      this.pdfValues.push(pdfValues);
+      this.pdfValues.push(tmpPdf);
     }
   }
 }
