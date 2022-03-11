@@ -282,8 +282,26 @@ export default {
 
       this.label1 = datasetsSkc[0]['label'];
       this.label2 = datasetsSkc[1]['label'];
-
-      let containerCharts = document.getElementById('containerCharts');
+      
+      
+      let containerCharts;
+      
+      switch(this.typeProduct){
+        case "1":  
+          containerCharts = document.getElementById('ChartCompareHydratant');
+        break;
+        case "2":
+          console.log(containerCharts)
+          containerCharts = document.getElementById('ChartCompareAntiOxydant');
+        break;
+        case "3":
+          containerCharts = document.getElementById('ChartCompareBarriere');
+        break;
+        default:
+          containerCharts = document.getElementById('containerCharts');
+          console.log(containerCharts)
+      }; 
+      
 
       let nameChart = 'chart' + this.countCharts.toString();
 
@@ -501,9 +519,19 @@ export default {
           barPercentage: 0.02,
           stack: 'vitc'
         }
-      ];
-
-      let containerCharts = document.getElementById('containerCharts');
+      ]; 
+      let containerCharts;
+      switch(this.typeProduct){
+        case '1':
+          containerCharts = document.getElementById('ChartCompareHydratant');
+        break;
+        case '2':
+          containerCharts = document.getElementById('ChartCompareAntiOxydant');
+        break;
+        case '3':
+          containerCharts = document.getElementById('ChartCompareBarriere');
+        break;
+      }; 
 
       let nameChart = 'chart' + this.countCharts.toString();
 
@@ -592,9 +620,20 @@ export default {
           pointHoverRadius: 10,
           order: 0
         }
-      ];
-
-      let containerCharts = document.getElementById('containerCharts');
+      ]; 
+      this.showScore = true;
+      let containerCharts;
+      switch(this.typeProduct){
+        case '1':
+          containerCharts = document.getElementById('ChartScoreHydratant');
+        break;
+        case '2':
+          containerCharts = document.getElementById('ChartScoreAntiOxydant');
+        break;
+        case '3':
+          containerCharts = document.getElementById('ChartscoreBarriere');
+        break;
+      }; 
 
       let nameChart = 'chart' + this.countCharts.toString();
 
@@ -701,9 +740,20 @@ export default {
           barPercentage: 0.02,
           stack: type
         }
-      ];
-
-      let containerCharts = document.getElementById('containerCharts');
+      ]; 
+      let containerCharts;
+      switch(this.typeProduct){
+        case '1':
+          containerCharts = document.getElementById('ChartCompareHydratant');
+        break;
+        case '2':
+          containerCharts = document.getElementById('ChartCompareAntiOxydant');
+        break;
+        case '3':
+          containerCharts = document.getElementById('ChartCompareBarriere');
+        break;
+      }; 
+      
 
       let nameChart = 'chart' + this.countCharts.toString();
 
