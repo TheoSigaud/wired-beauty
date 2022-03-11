@@ -1,8 +1,14 @@
 import * as XLSX from 'xlsx/xlsx.mjs';
+import { empty } from "nightwatch/lib/core/queue";
+import Pdf from '../../components/Pdf/Pdf.vue';
+import Navbar from '../../components/Navbar/Navbar.vue';
 
 export default {
   name: "Dashboard",
-
+  components: {
+    Pdf,
+    Navbar
+  },
   data() {
     return {
       charts: [],
@@ -16,7 +22,10 @@ export default {
       showSelection: false,
       showGenerate: false,
       showAddGraph: false,
-      showOption: false
+      showOption: false,
+      pdfValues: this.pdfValues,
+      label1: this.label1,
+      label2: this.label2
     }
   },
 
@@ -35,6 +44,7 @@ export default {
       this.showSelection = false;
       this.showGenerate = false;
       this.showAddGraph = false;
+      this.pdfValues = [];
 
       let containerCharts = document.getElementById('containerCharts');
       containerCharts.innerHTML = '';
@@ -63,6 +73,9 @@ export default {
 
     async generateChart() {
       await this.dataChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, {header: 1}));
+
+      this.xls = XLSX.utils.sheet_to_json(this.workbook.Sheets.légende, { header: 1 });
+      this.pdfValues.push(this.xls);
 
       this.typeChart = '';
       this.typeProduct = '';
@@ -220,6 +233,7 @@ export default {
       let dataVitc = [vitc.t0, vitc.timme, vitc.t7, vitc.t14];
 
       let dataBetween = []
+      let pdfValues = []
 
       for (let i = 0; i < dataSkc.length; i++) {
         dataBetween.push([dataVitc[i], dataSkc[i]]);
@@ -258,6 +272,9 @@ export default {
           order: 2,
         }
       ];
+
+      this.label1 = datasetsSkc[0]['label'];
+      this.label2 = datasetsSkc[1]['label'];
 
       let containerCharts = document.getElementById('containerCharts');
 
@@ -405,12 +422,12 @@ export default {
         tmpVitcAbr.t14
       ];
 
-      console.log(dataSkcAbr);
       console.log(dataVitcAbr);
+      console.log(dataVitcBar);
 
       const datasetsSkc = [
         {
-          label: 'hideee',
+          label: 'hidtffeee',
           data: dataSkcAbr,
           backgroundColor: 'rgb(148,195,114)',
           borderColor: 'rgb(59,170,118)',
@@ -580,6 +597,11 @@ export default {
           datasets: datasets
         },
         options: {
+          animation: {
+            onComplete: function () {
+              pdfValues.push(this.toBase64Image())
+            }
+          },
           responsive: true,
           plugins: {
             legend: {
@@ -717,8 +739,8 @@ export default {
           }
         }
       });
-
       this.charts.push(chart.toBase64Image());
+      this.pdfValues.push(pdfValues);
     }
   }
 }
