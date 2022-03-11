@@ -157,6 +157,21 @@ app.get('/api/pdf', (req, res) => {
     }).sort({_id: -1})
 });
 
+//Delete pdf
+app.post('/api/delete-pdf', (req, res) => {
+    const name = req.body.name;
+
+    Pdf.deleteOne({
+        name: name
+    }, function(err, post){
+        if (err)
+            res.send(err)
+        res.send({
+            success: true
+        })
+    })
+});
+
 function generatePwd() {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

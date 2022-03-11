@@ -16,7 +16,7 @@
           <td style="color: white">{{ pdf.name }}</td>
           <td>
             <button @click="showReport(pdf.pdf)">Voir</button>
-<!--            <button @click="deleteUser(pdf.uid)">Supprimer</button>-->
+            <button @click="deletePdf(pdf.name)">Supprimer</button>
           </td>
         </tr>
         </tbody>

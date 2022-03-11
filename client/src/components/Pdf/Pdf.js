@@ -47,8 +47,8 @@ export default {
           data => PdfService.savePdf({
             pdf: data,
             name: this.namePdf
-          }).then((response) => {
-
+          }).then(() => {
+            this.$router.push({name: 'Pdf'});
           })
         );
       }

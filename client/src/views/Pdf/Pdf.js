@@ -38,12 +38,12 @@ export default {
       this.pdf = response.data.pdf
     },
 
-    async deleteUser(uid) {
-        // UsersService.deleteUser({
-        //   uid: uid
-        // }).then(() => {
-        //   this.getUsers();
-        // });
+    async deletePdf(name) {
+        PdfService.deletePdf({
+          name: name
+        }).then(() => {
+          this.getPdf();
+        });
     },
 
     async showReport(pdf) {
