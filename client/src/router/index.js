@@ -22,13 +22,14 @@ const router = new Router({
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
-      // meta: {requiresAuth: true},
+      component: Admin,
+      meta: {requiresAuth: true},
     },
     {
       path: '/dashboard',
-      component: Dashboard
-      // meta: {requiresAuth: true},
+      component: Dashboard,
+      name: 'Dashboard',
+      meta: {requiresAuth: true},
     },
     {
       path: '/users',

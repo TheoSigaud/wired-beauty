@@ -16,7 +16,7 @@
           <p>Format accepted : .xlsx</p>
           <p v-if="errorUpload" style="color: red">{{ errorUpload }}</p>
         </div>
-        <div class="row align-items-center justify-content-center">
+        <div class="row align-items-center justify-content-center" v-if="showSelection">
           <div class="col-xl-2 col-md-4 mb-4">
             <label>Type du graphique</label>
             <select
@@ -44,7 +44,7 @@
               <option value="3">Barrière (3)</option>
             </select>
           </div>
-          <div class="col-xl-2 col-md-4 mb-4">
+          <div class="col-xl-2 col-md-4 mb-4" v-if="showOption">
             <label>Option</label>
             <select
               class="form-select"
