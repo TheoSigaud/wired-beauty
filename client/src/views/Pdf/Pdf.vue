@@ -6,22 +6,15 @@
     <router-link v-bind:to="{ name: 'NewUser' }" class="btn time-button__green mb-5">Crétion d'un client
     </router-link>
     <div v-if="users.length > 0" class="table-wrap">
-      <table id="table" class="row-border hover">
-        <thead>
+      <table>
         <tr>
-          <th>Email</th>
-          <th>Actions</th>
+          <td>email</td>
         </tr>
-        </thead>
-        <tbody>
         <tr v-bind:key="user.id" v-for="user in users">
           <td style="color: white">{{ user.email }}</td>
-          <td>
-            <button @click="resetPassword(user.email)">Réinitialiser le mot de passe</button>
-            <button @click="deleteUser(user.uid)">Supprimer</button>
-          </td>
+          <td><button @click="resetPassword(user.email)">Réinitialiser le mot de passe</button></td>
+          <td><button @click="deleteUser(user.uid)">Supprimer</button></td>
         </tr>
-        </tbody>
       </table>
     </div>
     <div v-else>
@@ -30,4 +23,4 @@
   </div>
 </template>
 
-<script src="./Users.js" type="text/javascript"></script>
+<script src="./Pdf.js" type="text/javascript"></script>

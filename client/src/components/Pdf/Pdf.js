@@ -57,19 +57,8 @@ export default {
                 window.URL.revokeObjectURL(blob);
               }, 100);
             })
-
-          //
-          // let pdfWindow = window.open("")
-          // pdfWindow.document.write(
-          //   "<iframe width='100%' height='100%' src='data:application/pdf;base64, " +
-          //   encodeURI(response.data.pdf) + "'></iframe>"
-          // )
-
         })
       );
-
-
-
     },
 
     async base64(pdf) {
