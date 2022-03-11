@@ -86,102 +86,146 @@
               <option value="vitc">Vitc</option>
             </select>
           </div>
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-2">
-          <button v-if="showGenerate" @click="generateChart()">
-            Générer le graphique
-          </button>
-        </div>
-        <div class="col-md-2">
-          <Pdf v-if="showAddGraph" v-bind:values="pdfValues"></Pdf>
-          <button v-if="showAddGraph" @click="addGraph()">
-            Ajouter un graphique
-          </button>
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-10 m-4">
-          <h5>Score 1 : Hydratant</h5>
-          <h5>
-            Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
-            critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
-          </h5>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            minlength="4"
-            maxlength="8"
-            size="10"
-          />
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-10 m-4">
-          <h3>Score 2 : Anti-Oxydant</h3>
-          <h5>
-            Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
-            critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
-          </h5>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            minlength="4"
-            maxlength="8"
-            size="10"
-          />
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-10 m-4">
-          <h3>Score 3 : Barrière</h3>
-          <h5>
-            Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
-            critères 3 = Barrière Moyenne sur (N = 1000) - Date début
-          </h5>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            minlength="4"
-            maxlength="8"
-            size="10"
-          />
-        </div>
-      </div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-10 m-4">
-          <h3>Score 4 : Peau non traité</h3>
-          <h5>
-            Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
-            critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
-          </h5>
-          <div id="peaunontraite"></div>
-        </div>
-      </div>
-      <div id="containerCharts"></div>
-      <div class="row align-items-center justify-content-center">
-        <div class="col-md-12 m-4">
-          <h2>Avis globale</h2>
-          <div id="">
-            <h3>Note globale :</h3>
-            <h3>Intention d'achat :</h3>
-            <h3>Préférence :</h3>
-            <span>VS</span>
-            <h3>Crème habituelle :</h3>
+          <div class="col-xl-2 col-md-2 mt-3" v-if="showGenerate">
+            <button
+              class="btn btn-primary shadow-sm"
+              v-if="showGenerate"
+              @click="generateChart()"
+            >
+              Générer le graphique
+            </button>
           </div>
-          <h2>Efficacité</h2>
-          <input type="text" />
-          <h2>Usage</h2>
-          <input type="text" />
-          <h2>Device IoT</h2>
-          <input type="text" />
+          <div class="col-xl-2 col-md-2 m-2" v-if="showAddGraph">
+            <button
+              class="btn btn-primary shadow-sm"
+              v-if="showAddGraph"
+              @click="addGraph()"
+            >
+              Ajouter un graphique
+            </button>
+          </div>
+          <div class="col-xl-2 col-md-4 mb-4" v-if="showOption">
+            <Pdf v-if="showAddGraph" v-bind:values="pdfValues"></Pdf>
+          </div>
+        </div>
+        <div class="row align-items-center justify-content-center">
+          <div class="col-md-10 m-0">
+            <div id="ChartScoreHydratant" v-if="showScore">
+              <h5>Score 1 : Hydratant</h5>
+            </div>
+            <div id="ChartCompareHydratant" v-if="showCompare">
+              <h5>
+                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
+                pour critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
+              </h5>
+            </div>
+          </div>
+          <div class="col-md-4" v-if="showCompare || showScore">
+            <h6>Commentaires</h6>
+            <input
+              class="form-control input-lg"
+              type="text"
+              id="CommentHydratant"
+              name="name"
+              minlength="5"
+              maxlength="255"
+              size="50"
+            />
+          </div>
+        </div>
+        <div class="row align-items-center justify-content-center">
+          <div class="col-md-10 m-4">
+            <div id="ChartScoreAntiOxydant" v-if="showScore">
+              <h5>Score 2 : Anti-Oxydant</h5>
+            </div>
+            <div id="ChartCompareAntiOxydant" v-if="showCompare">
+              <h5>
+                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
+                pour critères 2 = Anti-Oxydant Moyenne sur (N = 1000) - Date
+                début
+              </h5>
+            </div>
+          </div>
+          <div class="col-md-4" v-if="showCompare || showScore">
+            <h6>Commentaires</h6>
+            <input
+              class="form-control input-lg"
+              type="text"
+              id="CommentAntiOxydant"
+              name="name"
+              minlength="5"
+              maxlength="255"
+              size="50"
+            />
+          </div>
+        </div>
+        <div class="row align-items-center justify-content-center">
+          <div class="col-md-10 m-4">
+            <div id="ChartScoreBarriere" v-if="showScore">
+              <h5>Score 3 : Barrière</h5>
+            </div>
+            <div id="ChartCompareBarriere" v-if="showCompare">
+              <h5>
+                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
+                pour critères 3 = Barrière Moyenne sur (N = 1000) - Date début
+              </h5>
+            </div>
+          </div>
+          <div class="col-md-4" v-if="showCompare || showScore">
+            <h6>Commentaires</h6>
+            <input
+              class="form-control input-lg"
+              type="text"
+              id="CommentBarriere"
+              name="name"
+              minlength="5"
+              maxlength="255"
+              size="50"
+            />
+          </div>
+        </div>
+        <div class="row align-items-center justify-content-center">
+          <div class="col-md-10 m-4">
+            <div id="ChartScorePeau" v-if="showScore">
+              <h5>Score 4 : Peau non traité</h5>
+            </div>
+            <div id="ChartComparePeauNonTraite" v-if="showCompare">
+              <h5>
+                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
+                pour critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
+              </h5>
+            </div>
+          </div>
+        </div>
+
+        <div id="containerCharts"></div>
+
+        <div
+          class="row align-items-center justify-content-center"
+          v-if="showCompare || showScore"
+        >
+          <div class="col-md-3 m-0">
+            <h5>Avis globale</h5>
+            <div id="row">
+              <p>Note globale :</p>
+            </div>
+            <div id="row">
+              <p>Intention d'achat :</p>
+            </div>
+            <div id="row">
+              <p>Préférence :</p>
+              <span>VS</span>
+              <p>Crème habituelle :</p>
+            </div>
+          </div>
+          <div class="col-md-3 m-3">
+            <p>Efficacité</p>
+            <input class="form-control" type="text" />
+            <p>Usage</p>
+            <input class="form-control" type="text" />
+            <p>Device IoT</p>
+            <input class="form-control" type="text" />
+          </div>
         </div>
       </div>
     </div>
