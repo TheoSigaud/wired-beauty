@@ -428,19 +428,16 @@ export default {
         tmpVitcAbr.t14
       ];
 
-      console.log(dataVitcAbr);
-      console.log(dataVitcBar);
-
       const datasetsSkc = [
-        {
-          label: 'hidtffeee',
-          data: dataSkcAbr,
-          backgroundColor: 'rgb(148,195,114)',
-          borderColor: 'rgb(59,170,118)',
-          minBarLength: 4,
-          barPercentage: 0.04,
-          stack: 'skc'
-        },
+        // {
+        //   label: 'hidtffeee',
+        //   data: dataSkcAbr,
+        //   backgroundColor: 'rgb(148,195,114)',
+        //   borderColor: 'rgb(59,170,118)',
+        //   minBarLength: 4,
+        //   barPercentage: 0.04,
+        //   stack: 'skc'
+        // },
         {
           label: 'hide',
           data: dataSkcMedian,
@@ -462,15 +459,15 @@ export default {
           borderWidth: 0,
           stack: 'skc'
         },
-        {
-          label: 'hidhe',
-          data: dataVitcAbr,
-          backgroundColor: 'rgb(195,114,176)',
-          borderColor: 'rgb(59,170,118)',
-          minBarLength: 4,
-          barPercentage: 0.04,
-          stack: 'vitc'
-        },
+        // {
+        //   label: 'hidhe',
+        //   data: dataVitcAbr,
+        //   backgroundColor: 'rgb(195,114,176)',
+        //   borderColor: 'rgb(59,170,118)',
+        //   minBarLength: 4,
+        //   barPercentage: 0.04,
+        //   stack: 'vitc'
+        // },
         {
           label: 'Vitc',
           data: dataVitcBar,
