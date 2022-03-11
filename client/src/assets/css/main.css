@@ -10136,13 +10136,13 @@
     vertical-align: 0;
     border: 0;
     font-weight: 900;
-    content: '\f105';
+    content: '>';
     font-family: "Lora", "Montserrat";
   }
   
   .sidebar .nav-item.dropdown.show .dropdown-toggle::after,
   .topbar .nav-item.dropdown.show .dropdown-toggle::after {
-    content: '\f107';
+    content: '>';
   }
   
   .sidebar .nav-item .nav-link,
@@ -10418,7 +10418,7 @@
   
   .sidebar #sidebarToggle::after {
     font-weight: 900;
-    content: '\f104';
+    content: '>';
     font-family: "Lora", "Montserrat";
     margin-right: 0.1rem;
   }
@@ -10437,7 +10437,7 @@
   }
   
   .sidebar.toggled #sidebarToggle::after {
-    content: '\f105';
+    content: '>';
     font-family: "Lora", "Montserrat";
     margin-left: 0.25rem;
   }
@@ -10551,11 +10551,11 @@
       vertical-align: 0;
       border: 0;
       font-weight: 900;
-      content: '\f107';
+      content: '>';
       font-family: "Lora", "Montserrat";
     }
     .sidebar .nav-item .nav-link[data-toggle="collapse"].collapsed::after {
-      content: '\f105';
+      content: '>';
     }
     .sidebar .sidebar-brand .sidebar-brand-icon i {
       font-size: 2rem;
@@ -10809,7 +10809,7 @@
     padding-right: 1.725rem;
     line-height: 51px;
     font-weight: 900;
-    content: '\f107';
+    content: '>';
     font-family: "Lora", "Montserrat";
     color: #d1d3e2;
   }
@@ -10819,7 +10819,7 @@
   }
   
   .card .card-header[data-toggle="collapse"].collapsed::after {
-    content: '\f105';
+    content: '>';
   }
   
   .chart-area {
