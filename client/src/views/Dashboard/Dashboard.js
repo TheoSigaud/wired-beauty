@@ -1,12 +1,12 @@
 import DashboardService from '@/services/DashboardService';
 import * as XLSX from 'xlsx/xlsx.mjs';
-import {empty} from "nightwatch/lib/core/queue";
+import { empty } from "nightwatch/lib/core/queue";
 import Pdf from '../../components/Pdf/Pdf.vue';
 import Navbar from '../../components/Navbar/Navbar.vue';
 
 export default {
   name: "Dashboard",
-  components:{
+  components: {
     Pdf,
     Navbar
   },
@@ -31,7 +31,7 @@ export default {
 
   methods: {
 
-    
+
     async uploadFile(e) {
       this.file = e.target.files[0];
       this.errorUpload = null;
@@ -59,7 +59,7 @@ export default {
     async checkGenerate() {
       if (this.typeChart !== ''
         && this.typeProduct !== ''
-        && this.typeOption !== ''){
+        && this.typeOption !== '') {
         this.showGenerate = true;
       }
     },
@@ -70,7 +70,7 @@ export default {
           await this.dataMoisturizingChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, { header: 1 }));
           break
       }
- 
+
       this.xls = XLSX.utils.sheet_to_json(this.workbook.Sheets.légende, { header: 1 });
       this.pdfValues.push(this.xls);
 
@@ -93,17 +93,17 @@ export default {
     //      COMPARE      ////
     //////////////////////////////
     async dataMoisturizingChartLine(data) {
-        let indexSkin = data[0].indexOf("score_skinbiosense");
-        let indexTime = data[0].indexOf("session_id");
-        let indexValue = data[0].indexOf("mesure");
-        let indexProduct = data[0].indexOf("product_code");
+      let indexSkin = data[0].indexOf("score_skinbiosense");
+      let indexTime = data[0].indexOf("session_id");
+      let indexValue = data[0].indexOf("mesure");
+      let indexProduct = data[0].indexOf("product_code");
 
-        let dataSkc = {
-          t0: [],
-          timme: [],
-          t7: [],
-          t14: []
-        }
+      let dataSkc = {
+        t0: [],
+        timme: [],
+        t7: [],
+        t14: []
+      }
 
       let dataVitc = {
         t0: [],
@@ -112,50 +112,50 @@ export default {
         t14: []
       }
 
-        data.shift();
+      data.shift();
 
-        data.forEach(element => {
-          if (element[0] !== undefined) {
-            if (element[indexSkin] === Number(this.typeProduct)) {
-              switch (element[indexProduct]) {
-                case 417432:
-                  switch (element[indexTime]) {
-                    case 1:
-                      dataSkc.t0.push(element[indexValue]);
-                      break;
-                    case 2:
-                      dataSkc.timme.push(element[indexValue]);
-                      break;
-                    case 3:
-                      dataSkc.t7.push(element[indexValue]);
-                      break;
-                    case 4:
-                      dataSkc.t14.push(element[indexValue]);
-                      break;
-                  }
-                  break;
-                case 100218:
-                  switch (element[indexTime]) {
-                    case 1:
-                      dataVitc.t0.push(element[indexValue]);
-                      break;
-                    case 2:
-                      dataVitc.timme.push(element[indexValue]);
-                      break;
-                    case 3:
-                      dataVitc.t7.push(element[indexValue]);
-                      break;
-                    case 4:
-                      dataVitc.t14.push(element[indexValue]);
-                      break;
-                  }
-                  break;
-              }
+      data.forEach(element => {
+        if (element[0] !== undefined) {
+          if (element[indexSkin] === Number(this.typeProduct)) {
+            switch (element[indexProduct]) {
+              case 417432:
+                switch (element[indexTime]) {
+                  case 1:
+                    dataSkc.t0.push(element[indexValue]);
+                    break;
+                  case 2:
+                    dataSkc.timme.push(element[indexValue]);
+                    break;
+                  case 3:
+                    dataSkc.t7.push(element[indexValue]);
+                    break;
+                  case 4:
+                    dataSkc.t14.push(element[indexValue]);
+                    break;
+                }
+                break;
+              case 100218:
+                switch (element[indexTime]) {
+                  case 1:
+                    dataVitc.t0.push(element[indexValue]);
+                    break;
+                  case 2:
+                    dataVitc.timme.push(element[indexValue]);
+                    break;
+                  case 3:
+                    dataVitc.t7.push(element[indexValue]);
+                    break;
+                  case 4:
+                    dataVitc.t14.push(element[indexValue]);
+                    break;
+                }
+                break;
             }
           }
-        });
+        }
+      });
 
-      let arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length;
+      let arrAvg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
 
       dataSkc.t0 = arrAvg(dataSkc.t0);
       dataSkc.timme = arrAvg(dataSkc.timme);
@@ -190,7 +190,7 @@ export default {
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
-          borderDash: [10,5],
+          borderDash: [10, 5],
           order: 1,
           type: 'line'
         },
@@ -219,7 +219,7 @@ export default {
       this.label2 = datasetsSkc[1]['label'];
       let containerCharts = document.getElementById('containerCharts');
 
-      let nameChart = 'chart'+this.countCharts.toString();
+      let nameChart = 'chart' + this.countCharts.toString();
 
       this.countCharts++;
 
@@ -238,11 +238,11 @@ export default {
         data: {
           labels: ['T0', 'Timme', 'T7', 'T14'],
           datasets: datasetsSkc
-        }, 
+        },
         options: {
-          animation:{
-            onComplete: function(){
-              pdfValues.push(this.toBase64Image())         
+          animation: {
+            onComplete: function () {
+              pdfValues.push(this.toBase64Image())
             }
           },
           responsive: true,
@@ -257,7 +257,7 @@ export default {
             }
           }
         }
-      }); 
+      });
       this.charts.push(chart.toBase64Image());
       this.pdfValues.push(pdfValues);
     }

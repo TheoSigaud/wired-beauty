@@ -1,9 +1,9 @@
 import Navbar from '../../components/Navbar/Navbar.vue';
 
 export default {
-    name: "Dashboard",
+    name: "Admin",
     components:{
       Navbar
-    },
-  }
+    }
+}
   
