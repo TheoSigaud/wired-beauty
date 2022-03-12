@@ -25,8 +25,9 @@ export default {
       showCompare: false,
       showScore: false,
       pdfValues: [],
-      label1:'',
-      label2:''
+      charts: [],
+      label1: '',
+      label2: ''
     }
   },
 
@@ -39,14 +40,14 @@ export default {
     },
 
     async upload() {
-      this.charts = [];
       this.typeChart = '';
       this.typeProduct = '';
-      this.typeOption = ''; 
+      this.typeOption = '';
       this.showSelection = false;
       this.showGenerate = false;
-      this.showAddGraph = false;  
-      this.pdfValues = []; 
+      this.showAddGraph = false;
+      this.pdfValues = [];
+      this.charts = [];
       let containerCharts = document.getElementById('containerCharts');
       containerCharts.innerHTML = '';
 
@@ -61,7 +62,7 @@ export default {
         this.showOption = true;
         this.showScore = true;
         this.showCompare = false;
-      }else {
+      } else {
         this.showOption = false;
         this.showCompare = true;
         this.showScore = false;
@@ -282,41 +283,48 @@ export default {
 
       this.label1 = datasetsSkc[0]['label'];
       this.label2 = datasetsSkc[1]['label'];
-      
-      
+
+
       let containerCharts;
-      
-      switch(this.typeProduct){
-        case "1":  
+
+      switch (this.typeProduct) {
+        case "1":
           containerCharts = document.getElementById('ChartCompareHydratant');
-        break;
+          break;
         case "2":
-          console.log(containerCharts)
           containerCharts = document.getElementById('ChartCompareAntiOxydant');
-        break;
+          break;
         case "3":
           containerCharts = document.getElementById('ChartCompareBarriere');
-        break;
+          break;
         default:
           containerCharts = document.getElementById('containerCharts');
-          console.log(containerCharts)
-      }; 
-      
+      };
+
 
       let nameChart = 'chart' + this.countCharts.toString();
 
       this.countCharts++;
 
       let div = document.createElement("div");
-      div.setAttribute('style', "width: 1000px");
+      div.setAttribute('style', "width: 500px");
       let canvas = document.createElement("canvas");
       canvas.setAttribute('id', nameChart);
 
       div.append(canvas);
       containerCharts.append(div);
-
+      const plugin = {
+        id: 'custom_canvas_background_color',
+        beforeDraw: (chart) => {
+          const ctx = chart.canvas.getContext('2d');
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = 'rgba(246,247, 247,0.6)';
+          ctx.fillRect(0, 0, chart.width, chart.height);
+          ctx.restore();
+        }
+      };
       let ctx = document.getElementById(nameChart).getContext('2d');
-
       let chart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -354,10 +362,12 @@ export default {
               },
             }
           }
-        }
+        },
+        plugins: [plugin]
+
       });
 
-      this.pdfValues.push(tmpPdf);
+      this.charts.push(tmpPdf);
     },
 
     async chartCandle(skc, vitc) {
@@ -374,7 +384,7 @@ export default {
         [await this.quartile(skc.t0, 25), await this.quartile(skc.t0, 75)],
         [await this.quartile(skc.timme, 25), await this.quartile(skc.timme, 75)],
         [await this.quartile(skc.t7, 25), await this.quartile(skc.t7, 75)],
-        [await this.quartile(skc.t14, 25), await this.quartile(skc.t14,75)]
+        [await this.quartile(skc.t14, 25), await this.quartile(skc.t14, 75)]
       ];
 
       let dataSkcMedian = [
@@ -401,7 +411,7 @@ export default {
       let dataVitcMedian = [
         [await this.quartile(vitc.t0, 50), await this.quartile(vitc.t0, 50)],
         [await this.quartile(vitc.timme, 50), await this.quartile(vitc.timme, 50)],
-        [await this.quartile(vitc.t7, 50), await this.quartile(vitc.t7,50)],
+        [await this.quartile(vitc.t7, 50), await this.quartile(vitc.t7, 50)],
         [await this.quartile(vitc.t14, 50), await this.quartile(vitc.t14, 50)]
       ];
 
@@ -419,7 +429,7 @@ export default {
         t14: []
       }
 
-      for (let i = 0; i < 4; i ++) {
+      for (let i = 0; i < 4; i++) {
         let interQuartile = (await this.quartile(skc[Object.keys(skc)[i]], 75) - await this.quartile(skc[Object.keys(skc)[i]], 25));
         let abr = await this.quartile(skc[Object.keys(skc)[i]], 75) + 1.5 * interQuartile;
         skc[Object.keys(skc)[i]].forEach(element => {
@@ -429,7 +439,7 @@ export default {
         })
       }
 
-      for (let i = 0; i < 4; i ++) {
+      for (let i = 0; i < 4; i++) {
         let interQuartile = (await this.quartile(vitc[Object.keys(vitc)[i]], 75) - await this.quartile(vitc[Object.keys(vitc)[i]], 25));
         let abr = await this.quartile(vitc[Object.keys(vitc)[i]], 75) + 1.5 * interQuartile;
         vitc[Object.keys(vitc)[i]].forEach(element => {
@@ -452,9 +462,6 @@ export default {
         tmpVitcAbr.t7,
         tmpVitcAbr.t14
       ];
-
-      console.log(dataVitcAbr);
-      console.log(dataVitcBar);
 
       const datasetsSkc = [
         {
@@ -519,35 +526,42 @@ export default {
           barPercentage: 0.02,
           stack: 'vitc'
         }
-      ]; 
+      ];
       let containerCharts;
-      switch(this.typeProduct){
+      switch (this.typeProduct) {
         case '1':
           containerCharts = document.getElementById('ChartCompareHydratant');
-        break;
+          break;
         case '2':
           containerCharts = document.getElementById('ChartCompareAntiOxydant');
-        break;
+          break;
         case '3':
           containerCharts = document.getElementById('ChartCompareBarriere');
-        break;
-      }; 
+          break;
+      };
 
       let nameChart = 'chart' + this.countCharts.toString();
 
       this.countCharts++;
 
       let div = document.createElement("div");
-      div.setAttribute('style', "width: 1000px");
+      div.setAttribute('style', "width: 500px");
       let canvas = document.createElement("canvas");
       canvas.setAttribute('id', nameChart);
-      let textarea = document.createElement("textarea");
-      textarea.setAttribute('placeholder', 'Commentaires');
-
+      let chartImg = canvas.toDataURL("image/png", 1.0);
       div.append(canvas);
-      div.append(textarea);
       containerCharts.append(div);
-
+      const plugin = {
+        id: 'custom_canvas_background_color',
+        beforeDraw: (chart) => {
+          const ctx = chart.canvas.getContext('2d');
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = 'rgba(246,247, 247,0.6)';
+          ctx.fillRect(0, 0, chart.width, chart.height);
+          ctx.restore();
+        }
+      };
       let ctx = document.getElementById(nameChart).getContext('2d');
 
       let chart = new Chart(ctx, {
@@ -591,10 +605,11 @@ export default {
               }
             }
           }
-        }
+        },
+        plugins: [plugin]
       });
 
-      this.pdfValues.push(tmpPdf);
+      this.charts.push(tmpPdf);
     },
 
 
@@ -620,33 +635,43 @@ export default {
           pointHoverRadius: 10,
           order: 0
         }
-      ]; 
+      ];
       this.showScore = true;
       let containerCharts;
-      switch(this.typeProduct){
+      switch (this.typeProduct) {
         case '1':
           containerCharts = document.getElementById('ChartScoreHydratant');
-        break;
+          break;
         case '2':
           containerCharts = document.getElementById('ChartScoreAntiOxydant');
-        break;
+          break;
         case '3':
           containerCharts = document.getElementById('ChartscoreBarriere');
-        break;
-      }; 
+          break;
+      };
 
       let nameChart = 'chart' + this.countCharts.toString();
 
       this.countCharts++;
 
       let div = document.createElement("div");
-      div.setAttribute('style', "width: 1000px");
+      div.setAttribute('style', "width: 500px");
       let canvas = document.createElement("canvas");
       canvas.setAttribute('id', nameChart);
 
       div.append(canvas);
       containerCharts.append(div);
-
+      const plugin = {
+        id: 'custom_canvas_background_color',
+        beforeDraw: (chart) => {
+          const ctx = chart.canvas.getContext('2d');
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = 'rgba(246,247, 247,0.6)';
+          ctx.fillRect(0, 0, chart.width, chart.height);
+          ctx.restore();
+        }
+      };
       let ctx = document.getElementById(nameChart).getContext('2d');
 
       let chart = new Chart(ctx, {
@@ -686,10 +711,11 @@ export default {
               },
             }
           }
-        }
+        },
+        plugins: [plugin]
       });
 
-      this.pdfValues.push(tmpPdf);
+      this.charts.push(tmpPdf);
     },
 
     async chartCandleScore(value, type) {
@@ -706,7 +732,7 @@ export default {
         [await this.quartile(value.t0, 25), await this.quartile(value.t0, 75)],
         [await this.quartile(value.timme, 25), await this.quartile(value.timme, 75)],
         [await this.quartile(value.t7, 25), await this.quartile(value.t7, 75)],
-        [await this.quartile(value.t14, 25), await this.quartile(value.t14,75)]
+        [await this.quartile(value.t14, 25), await this.quartile(value.t14, 75)]
       ];
 
       let dataMedian = [
@@ -740,27 +766,27 @@ export default {
           barPercentage: 0.02,
           stack: type
         }
-      ]; 
+      ];
       let containerCharts;
-      switch(this.typeProduct){
+      switch (this.typeProduct) {
         case '1':
           containerCharts = document.getElementById('ChartCompareHydratant');
-        break;
+          break;
         case '2':
           containerCharts = document.getElementById('ChartCompareAntiOxydant');
-        break;
+          break;
         case '3':
           containerCharts = document.getElementById('ChartCompareBarriere');
-        break;
-      }; 
-      
+          break;
+      };
+
 
       let nameChart = 'chart' + this.countCharts.toString();
 
       this.countCharts++;
 
       let div = document.createElement("div");
-      div.setAttribute('style', "width: 1000px");
+      div.setAttribute('style', "width: 500px");
       let canvas = document.createElement("canvas");
       canvas.setAttribute('id', nameChart);
       let textarea = document.createElement("textarea");
@@ -769,7 +795,17 @@ export default {
       div.append(canvas);
       div.append(textarea);
       containerCharts.append(div);
-
+      const plugin = {
+        id: 'custom_canvas_background_color',
+        beforeDraw: (chart) => {
+          const ctx = chart.canvas.getContext('2d');
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-over';
+          ctx.fillStyle = 'rgba(246,247, 247,0.6)';
+          ctx.fillRect(0, 0, chart.width, chart.height);
+          ctx.restore();
+        }
+      };
       let ctx = document.getElementById(nameChart).getContext('2d');
 
       let chart = new Chart(ctx, {
@@ -812,10 +848,11 @@ export default {
                 }
               }
             }
-          }
-        }
+          },
+        },
+        plugins: [plugin]
       });
-      this.pdfValues.push(tmpPdf);
+      this.charts.push(tmpPdf);
     }
   }
 }
