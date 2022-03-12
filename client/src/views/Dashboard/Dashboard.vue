@@ -1,8 +1,8 @@
 <template>
-  <div id="wrapper">
-    <Navbar></Navbar>
+  <div class="row">
+    <Navbar class="col-2"></Navbar>
     <router-view />
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="col-10">
       <div class="container-fluid">
         <div
           class="d-sm-flex align-items-center justify-content-between m-4 ml-5"
@@ -288,82 +288,7 @@
           class="row align-items-center justify-content-center"
           v-if="showCompare || showScore"
         >
-          <h3>Utilisateurs</h3>
-          <div class="col-md-6">
-            <div
-              class="row align-items-center justify-content-center text-center"
-            >
-              <h3 class="">Avis globale</h3>
-              <div class="row align-items-center">
-                <div class="col-md-3 mt-3">
-                  <p>Note globale :</p>
-                </div>
-                <div class="col-md-2 m-0">
-                  <input class="form-control" type="number" min="0" max="10" />
-                </div>
-                <div class="col-md-auto m-0">
-                  <span>/ 10</span>
-                </div>
-              </div>
-              <div id="row align-items-center justify-content-center">
-                <p>Pensez-vous acheter ce produit ? :</p>
-                <div class="col-md-2 m-0">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckDefault"
-                    />
-                    <label class="form-check-label" for="flexCheckDefault">
-                      Oui
-                    </label>
-                  </div>
-                </div>
-                <div class="col-md-2 ml-1">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckDefault"
-                    />
-                    <label class="form-check-label" for="flexCheckDefault">
-                      Non
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div id="row">
-                <p>Précisez vos produit(s) habituel(s) ?</p>
-                <input class="form-control m-2" type="text" />
-                <p>
-                  Qu'aimez-vous dans ce(s) produit(s)' ? Par exemple : texture,
-                  application, etc
-                </p>
-                <input class="form-control m-2" type="text" />
-              </div>
-            </div>
-            <div
-              class="row align-items-center justify-content-center"
-              v-if="showCompare || showScore"
-            >
-              <div class="col-md-6 m-3">
-                <p>Avez-vous trouver ce produit efficace ?</p>
-                <input class="form-control m-2" type="text" />
-                <p>
-                  Avez-vous trouvé son usage facile ? Pourriez-vous l'intégrer à
-                  votre routine ?
-                </p>
-                <input class="form-control m-2" type="text" />
-                <p>
-                  Qu'avez vous pensé de la technologie Application/Capteur ? Que
-                  pensez-vous de cet innovation en général ?
-                </p>
-                <input class="form-control m-2" type="text" />
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

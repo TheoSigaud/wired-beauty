@@ -12,7 +12,7 @@
       </thead>
       <tbody>
       <tr v-bind:key="report.id" v-for="report in reports">
-        <td style="color: white">{{ report.name }}</td>
+        <td>{{ report.name }}</td>
         <td>
           <button @click="getPdf(report.name)">Voir</button>
         </td>
