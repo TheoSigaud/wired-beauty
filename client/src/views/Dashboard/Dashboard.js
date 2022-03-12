@@ -72,14 +72,14 @@ export default {
         && this.typeProduct !== ''
         && ((this.typeOption !== '' && this.showOption) || this.showOption === false)) {
         this.showGenerate = true;
-      }else {
+      } else {
         this.showGenerate = false;
-      } 
+      }
 
     },
 
     async generateChart() {
-      await this.dataChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, {header: 1}));
+      await this.dataChartLine(XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, { header: 1 }));
 
       this.xls = XLSX.utils.sheet_to_json(this.workbook.Sheets.légende, { header: 1 });
       this.pdfValues.push(this.xls);
@@ -88,9 +88,9 @@ export default {
       this.typeProduct = '';
       this.typeOption = '';
       this.showSelection = false;
-      this.showGenerate = false; 
+      this.showGenerate = false;
 
-      this.showAddGraph = true; 
+      this.showAddGraph = true;
     },
 
     async addGraph() {
@@ -103,10 +103,10 @@ export default {
 
     async quartile(array, percentile) {
       array.sort();
-      let index = (percentile/100) * array.length;
+      let index = (percentile / 100) * array.length;
       let result;
       if (Math.ceil(index) === index) {
-        result = (array[(index-1)] + array[index])/2;
+        result = (array[(index - 1)] + array[index]) / 2;
       }
       else {
         result = array[Math.ceil(index)];
@@ -115,9 +115,7 @@ export default {
     },
 
     async thirdQuartile(array) {
-      console.log(Math.ceil(0.75*array.length))
-      console.log(array[Math.ceil(0.75*array.length)])
-      return array[Math.ceil(0.75*array.length)];
+      return array[Math.ceil(0.75 * array.length)];
     },
 
     //////////////////////////////

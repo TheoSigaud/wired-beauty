@@ -7,16 +7,13 @@
         <div
           class="d-sm-flex align-items-center justify-content-between m-4 ml-5"
         >
-          <h1 class="h3 mb-0 text-gray-800">Report Builder</h1>
+          <h1 class="h3 mb-0 mt-2 text-gray-800 font-weight-bold">Report Builder</h1>
         </div>
         <div
           class="row d-sm-flex align-items-center justify-content-center m-0"
         >
-          <div class="col-md-9 ml-5">
-            <h4>Step 1 : Import your file</h4>
-          </div>
-          <div class="col-md-3">
-            <label class="custom-file-upload m-1">
+          <div class="col-lg-3 col-md-5">
+            <label class="custom-file-upload m-1 shadow-sm">
               <input type="file" accept=".xlsx" @change="uploadFile" />
               <i class="fas fa-upload"></i> Import your file
             </label>
@@ -25,29 +22,23 @@
             </button>
           </div>
         </div>
-        <div
-          class="d-sm-flex align-items-center justify-content-center m-0"
-        >
+        <div class="d-sm-flex align-items-center justify-content-center m-0">
           <p>Format of file : .xlsx</p>
         </div>
-        <div
-          class="d-sm-flex align-items-center justify-content-center m-0"
-        >
-          <span id="NameFileUploaded"></span>
+        <div class="d-sm-flex align-items-center justify-content-center m-0">
+          <span id="NameFileUploaded">No file imported</span>
         </div>
-        <div
-          class="d-sm-flex align-items-center justify-content-center m-0"
-        >
+        <div class="d-sm-flex align-items-center justify-content-center m-0">
           <p v-if="errorUpload" style="color: red">{{ errorUpload }}</p>
         </div>
         <div class="row align-items-center justify-content-center">
-          <h4 class="col-md-9 m-5" v-if="showSelection">
-            Step 2 : Select the data you want in the report
-          </h4>
+          <h5 class="col-md-3 m-1 mt-3" v-if="showSelection">
+            Customize your report here :
+          </h5>
         </div>
         <div class="row align-items-center justify-content-center">
           <div class="col-xl-4 col-md-4 mb-2" v-if="showSelection">
-            <label>Type du graphique</label>
+            <label>Chart type</label>
             <select
               class="form-select"
               id="typeChart"
@@ -86,39 +77,61 @@
               <option value="vitc">Vitc</option>
             </select>
           </div>
-          <div class="col-xl-2 col-md-2 mt-3" v-if="showGenerate">
+          <div class="col-xl-auto col-md-3 mt-3" v-if="showGenerate">
             <button
               class="btn btn-primary shadow-sm"
               v-if="showGenerate"
               @click="generateChart()"
             >
-              Générer le graphique
+              Build charts
             </button>
           </div>
-          <div class="col-xl-2 col-md-2 m-2" v-if="showAddGraph">
+          <div class="col-xl-auto col-md-2 m-2" v-if="showAddGraph">
             <button
               class="btn btn-primary shadow-sm"
               v-if="showAddGraph"
               @click="addGraph()"
             >
-              Ajouter un graphique
+              <i class="fa-solid fa-plus"></i> Add chart
             </button>
           </div>
-          <div class="col-xl-2 col-md-4 mb-4" v-if="showOption">
-            <Pdf v-if="showAddGraph" v-bind:values="pdfValues"></Pdf>
+          <div class="col-xl-auto col-md-2 m-2" v-if="showAddGraph">
+            <Pdf v-if="showAddGraph" v-bind:values="pdfValues" v-bind:charts="charts"></Pdf>
           </div>
         </div>
         <div class="row align-items-center justify-content-center">
           <div class="col-md-10 m-0">
-            <div id="ChartScoreHydratant" v-if="showScore">
-              <h5>Score 1 : Hydratant</h5>
-            </div>
-            <div id="ChartCompareHydratant" v-if="showCompare">
-              <h5>
-                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
-                pour critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
-              </h5>
-            </div>
+            <h5
+              class="row align-items-center justify-content-center"
+              v-if="showScore"
+            >
+              Score 1 : Hydratant
+            </h5>
+            <div
+              class="align-items-center justify-content-center"
+              id="ChartScoreHydratant"
+              v-if="showScore"
+            ></div>
+            <h5
+              class="row align-items-center justify-content-center m-2"
+              v-if="showCompare"
+            >
+              Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
+              critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
+            </h5>
+            <div
+              class="
+                d-lg-flex
+                align-items-center
+                justify-content-center
+                shadow
+                mb-4
+                p-5
+                b-rounded
+              "
+              id="ChartCompareHydratant"
+              v-if="showCompare"
+            ></div>
           </div>
           <div class="col-md-4" v-if="showCompare || showScore">
             <h6>Commentaires</h6>
@@ -135,16 +148,28 @@
         </div>
         <div class="row align-items-center justify-content-center">
           <div class="col-md-10 m-4">
-            <div id="ChartScoreAntiOxydant" v-if="showScore">
-              <h5>Score 2 : Anti-Oxydant</h5>
-            </div>
-            <div id="ChartCompareAntiOxydant" v-if="showCompare">
-              <h5>
-                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
-                pour critères 2 = Anti-Oxydant Moyenne sur (N = 1000) - Date
-                début
-              </h5>
-            </div>
+            <h5 v-if="showScore">Score 2 : Anti-Oxydant</h5>
+            <div id="ChartScoreAntiOxydant" v-if="showScore"></div>
+            <h5
+              class="row align-items-center justify-content-center"
+              v-if="showCompare"
+            >
+              Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
+              critères 2 = Anti-Oxydant Moyenne sur (N = 1000) - Date début
+            </h5>
+            <div
+              class="
+                d-lg-flex
+                align-items-center
+                justify-content-center
+                shadow
+                mb-4
+                p-5
+                b-rounded
+              "
+              id="ChartCompareAntiOxydant"
+              v-if="showCompare"
+            ></div>
           </div>
           <div class="col-md-4" v-if="showCompare || showScore">
             <h6>Commentaires</h6>
@@ -161,15 +186,37 @@
         </div>
         <div class="row align-items-center justify-content-center">
           <div class="col-md-10 m-4">
-            <div id="ChartScoreBarriere" v-if="showScore">
-              <h5>Score 3 : Barrière</h5>
-            </div>
-            <div id="ChartCompareBarriere" v-if="showCompare">
-              <h5>
-                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
-                pour critères 3 = Barrière Moyenne sur (N = 1000) - Date début
-              </h5>
-            </div>
+            <h5
+              class="row align-items-center justify-content-center"
+              v-if="showScore"
+            >
+              Score 3 : Barrière
+            </h5>
+            <div
+              class="d-lg-flex align-items-center justify-content-center"
+              id="ChartScoreBarriere"
+              v-if="showScore"
+            ></div>
+            <h5
+              class="row align-items-center justify-content-center"
+              v-if="showCompare"
+            >
+              Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
+              critères 3 = Barrière Moyenne sur (N = 1000) - Date début
+            </h5>
+            <div
+              class="
+                d-lg-flex
+                align-items-center
+                justify-content-center
+                shadow
+                mb-4
+                p-5
+                b-rounded
+              "
+              id="ChartCompareBarriere"
+              v-if="showCompare"
+            ></div>
           </div>
           <div class="col-md-4" v-if="showCompare || showScore">
             <h6>Commentaires</h6>
@@ -186,15 +233,37 @@
         </div>
         <div class="row align-items-center justify-content-center">
           <div class="col-md-10 m-4">
-            <div id="ChartScorePeau" v-if="showScore">
-              <h5>Score 4 : Peau non traité</h5>
-            </div>
-            <div id="ChartComparePeauNonTraite" v-if="showCompare">
-              <h5>
-                Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec
-                pour critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
-              </h5>
-            </div>
+            <h5
+              class="row align-items-center justify-content-center"
+              v-if="showScore"
+            >
+              Score 4 : Peau non traité
+            </h5>
+            <div
+              class="
+                d-lg-flex
+                align-items-center
+                justify-content-center
+                shadow
+                mb-4
+                p-5
+                b-rounded
+              "
+              id="ChartScorePeau"
+              v-if="showScore"
+            ></div>
+            <h5
+              class="row align-items-center justify-content-center"
+              v-if="showCompare"
+            >
+              Comparer Moyenne {{ label1 }} & {{ label2 }} de T0 à T1 avec pour
+              critères 1 = Hydratant Moyenne sur (N = 1000) - Date début
+            </h5>
+            <div
+              class="d-lg-flex align-items-center justify-content-center"
+              id="ChartComparePeauNonTraite"
+              v-if="showCompare"
+            ></div>
           </div>
         </div>
 
@@ -204,27 +273,81 @@
           class="row align-items-center justify-content-center"
           v-if="showCompare || showScore"
         >
-          <div class="col-md-3 m-0">
-            <h5>Avis globale</h5>
-            <div id="row">
-              <p>Note globale :</p>
+          <h3>Utilisateurs</h3>
+          <div class="col-md-6">
+            <div
+              class="row align-items-center justify-content-center text-center"
+            >
+              <h3 class="">Avis globale</h3>
+              <div class="row align-items-center">
+                <div class="col-md-3 mt-3">
+                  <p>Note globale :</p>
+                </div>
+                <div class="col-md-2 m-0">
+                  <input class="form-control" type="number" min="0" max="10" />
+                </div>
+                <div class="col-md-auto m-0">
+                  <span>/ 10</span>
+                </div>
+              </div>
+              <div id="row align-items-center justify-content-center">
+                <p>Pensez-vous acheter ce produit ? :</p>
+                <div class="col-md-2 m-0">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                    <label class="form-check-label" for="flexCheckDefault">
+                      Oui
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-2 ml-1">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                    />
+                    <label class="form-check-label" for="flexCheckDefault">
+                      Non
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div id="row">
+                <p>Précisez vos produit(s) habituel(s) ?</p>
+                <input class="form-control m-2" type="text" />
+                <p>
+                  Qu'aimez-vous dans ce(s) produit(s)' ? Par exemple : texture,
+                  application, etc
+                </p>
+                <input class="form-control m-2" type="text" />
+              </div>
             </div>
-            <div id="row">
-              <p>Intention d'achat :</p>
+            <div
+              class="row align-items-center justify-content-center"
+              v-if="showCompare || showScore"
+            >
+              <div class="col-md-6 m-3">
+                <p>Avez-vous trouver ce produit efficace ?</p>
+                <input class="form-control m-2" type="text" />
+                <p>
+                  Avez-vous trouvé son usage facile ? Pourriez-vous l'intégrer à
+                  votre routine ?
+                </p>
+                <input class="form-control m-2" type="text" />
+                <p>
+                  Qu'avez vous pensé de la technologie Application/Capteur ? Que
+                  pensez-vous de cet innovation en général ?
+                </p>
+                <input class="form-control m-2" type="text" />
+              </div>
             </div>
-            <div id="row">
-              <p>Préférence :</p>
-              <span>VS</span>
-              <p>Crème habituelle :</p>
-            </div>
-          </div>
-          <div class="col-md-3 m-3">
-            <p>Efficacité</p>
-            <input class="form-control" type="text" />
-            <p>Usage</p>
-            <input class="form-control" type="text" />
-            <p>Device IoT</p>
-            <input class="form-control" type="text" />
           </div>
         </div>
       </div>
