@@ -1,5 +1,7 @@
 import PdfService from '@/services/PdfService'
-import {getAuth, onAuthStateChanged} from "firebase/auth";
+<v-style>
+  
+  </v-style>
 const auth = getAuth();
 
 export default {

@@ -1,8 +1,9 @@
 <template>
   <ul
     class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion shadow"
-    id="accordionSidebar"
+    id="accordionSidebar" 
   >
+  <div v-if=admin>
     <a
       class="sidebar-brand d-flex align-items-center justify-content-center"
       href="/dashboard"
@@ -45,6 +46,10 @@
       </a>
     </li>
     <hr class="sidebar-divider d-none d-md-block" />
+    </div>
+    <div>
+      <hr class="sidebar-divider d-none d-md-block" />
+    </div>
   </ul>
 </template>
 
