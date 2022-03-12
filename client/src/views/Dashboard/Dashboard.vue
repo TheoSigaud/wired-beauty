@@ -44,6 +44,21 @@
               <option value="3">Barrière (3)</option>
             </select>
           </div>
+          <div class="col-xl-2 col-md-4 mb-4">
+            <label>Utilisateur</label>
+            <select
+              class="form-select"
+              id="typeUser"
+              v-model="typeUser"
+              @change="checkGenerate()"
+            >
+              <option disabled value="">Choisissez</option>
+              <option value="all">Tous</option>
+              <option v-for="listUser in listUsers" :value="listUser" :key="listUser">
+                {{ listUser }}
+              </option>
+            </select>
+          </div>
           <div class="col-xl-2 col-md-4 mb-4" v-if="showOption">
             <label>Option</label>
             <select

@@ -12,11 +12,13 @@ export default {
     return {
       charts: [],
       countCharts: 0,
+      listUsers: [],
       file: null,
       errorUpload: null,
       workbook: null,
       typeChart: '',
       typeProduct: '',
+      typeUser: '',
       typeOption: '',
       showSelection: false,
       showGenerate: false,
@@ -51,6 +53,17 @@ export default {
       let data = await this.file.arrayBuffer();
       this.workbook = XLSX.read(data);
 
+      let skin = XLSX.utils.sheet_to_json(this.workbook.Sheets.score_skinbiosense, {header: 1});
+      let indexUser = skin[0].indexOf("user_id");
+
+      skin.shift();
+
+      skin.forEach(element => {
+        if (this.listUsers.indexOf(element[indexUser]) === -1){
+          this.listUsers.push(element[indexUser]);
+        }
+      });
+
       this.showSelection = true;
     },
 
@@ -63,6 +76,7 @@ export default {
 
       if (this.typeChart !== ''
         && this.typeProduct !== ''
+        && this.typeUser !== ''
         && ((this.typeOption !== '' && this.showOption) || this.showOption === false)) {
         this.showGenerate = true;
       }else {
@@ -106,17 +120,13 @@ export default {
       return result;
     },
 
-    async thirdQuartile(array) {
-      console.log(Math.ceil(0.75*array.length))
-      console.log(array[Math.ceil(0.75*array.length)])
-      return array[Math.ceil(0.75*array.length)];
-    },
 
     //////////////////////////////
     //      COMPARE      ////
     //////////////////////////////
     async dataChartLine(data, type) {
       let indexSkin = data[0].indexOf("score_skinbiosense");
+      let indexUserId = data[0].indexOf("user_id");
       let indexTime = data[0].indexOf("session_id");
       let indexValue = data[0].indexOf("mesure");
       let indexProduct = data[0].indexOf("product_code");
@@ -155,40 +165,79 @@ export default {
 
       data.forEach(element => {
         if (element[0] !== undefined) {
-          if (element[indexSkin] === Number(this.typeProduct)) {
-            switch (element[indexProduct]) {
-              case 417432:
-                switch (element[indexTime]) {
-                  case 1:
-                    dataSkc.data.t0.push(element[indexValue]);
-                    break;
-                  case 2:
-                    dataSkc.data.timme.push(element[indexValue]);
-                    break;
-                  case 3:
-                    dataSkc.data.t7.push(element[indexValue]);
-                    break;
-                  case 4:
-                    dataSkc.data.t14.push(element[indexValue]);
-                    break;
-                }
-                break;
-              case 100218:
-                switch (element[indexTime]) {
-                  case 1:
-                    dataVitc.data.t0.push(element[indexValue]);
-                    break;
-                  case 2:
-                    dataVitc.data.timme.push(element[indexValue]);
-                    break;
-                  case 3:
-                    dataVitc.data.t7.push(element[indexValue]);
-                    break;
-                  case 4:
-                    dataVitc.data.t14.push(element[indexValue]);
-                    break;
-                }
-                break;
+          if (this.typeUser === 'all') {
+            if (element[indexSkin] === Number(this.typeProduct)) {
+              switch (element[indexProduct]) {
+                case 417432:
+                  switch (element[indexTime]) {
+                    case 1:
+                      dataSkc.data.t0.push(element[indexValue]);
+                      break;
+                    case 2:
+                      dataSkc.data.timme.push(element[indexValue]);
+                      break;
+                    case 3:
+                      dataSkc.data.t7.push(element[indexValue]);
+                      break;
+                    case 4:
+                      dataSkc.data.t14.push(element[indexValue]);
+                      break;
+                  }
+                  break;
+                case 100218:
+                  switch (element[indexTime]) {
+                    case 1:
+                      dataVitc.data.t0.push(element[indexValue]);
+                      break;
+                    case 2:
+                      dataVitc.data.timme.push(element[indexValue]);
+                      break;
+                    case 3:
+                      dataVitc.data.t7.push(element[indexValue]);
+                      break;
+                    case 4:
+                      dataVitc.data.t14.push(element[indexValue]);
+                      break;
+                  }
+                  break;
+              }
+            }
+          } else {
+            if (element[indexSkin] === Number(this.typeProduct) && element[indexUserId] === this.typeUser) {
+              switch (element[indexProduct]) {
+                case 417432:
+                  switch (element[indexTime]) {
+                    case 1:
+                      dataSkc.data.t0.push(element[indexValue]);
+                      break;
+                    case 2:
+                      dataSkc.data.timme.push(element[indexValue]);
+                      break;
+                    case 3:
+                      dataSkc.data.t7.push(element[indexValue]);
+                      break;
+                    case 4:
+                      dataSkc.data.t14.push(element[indexValue]);
+                      break;
+                  }
+                  break;
+                case 100218:
+                  switch (element[indexTime]) {
+                    case 1:
+                      dataVitc.data.t0.push(element[indexValue]);
+                      break;
+                    case 2:
+                      dataVitc.data.timme.push(element[indexValue]);
+                      break;
+                    case 3:
+                      dataVitc.data.t7.push(element[indexValue]);
+                      break;
+                    case 4:
+                      dataVitc.data.t14.push(element[indexValue]);
+                      break;
+                  }
+                  break;
+              }
             }
           }
         }
