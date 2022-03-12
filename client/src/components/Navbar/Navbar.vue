@@ -24,12 +24,12 @@
     <li class="nav-item">
       <a
         class="nav-link collapsed"
-        href="#" 
+        href="#"
       >
         <i class="fa-solid fa-users"></i>
         <span>Clients</span>
-      </a> 
-    </li> 
+      </a>
+    </li>
 
     <hr class="sidebar-divider" />
 
@@ -43,7 +43,7 @@
         <i class="fa-solid fa-file"></i>
         <span>Reports</span>
       </a>
-    </li> 
+    </li>
     <hr class="sidebar-divider d-none d-md-block" />
   </ul>
 </template>
