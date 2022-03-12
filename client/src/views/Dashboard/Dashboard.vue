@@ -64,7 +64,7 @@
               <option value="3">Barrière (3)</option>
             </select>
           </div>
-          <div class="col-xl-4 col-md-4 mb-2">
+          <div class="col-xl-4 col-md-4 mb-2" v-if="showOption || showSelection">
             <label>Utilisateur</label>
             <select
               class="form-select"
