@@ -2,17 +2,18 @@ import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyAJNBhoJpYdfj1LvTrSinef_0yIN-Jy8tg",
+  apiKey: "AIzaSyA5j0RzqBuTlQ1rm-frSnUlpM09gg_BHnY",
 
-  authDomain: "my-stories-2556b.firebaseapp.com",
+  authDomain: "wired-beauty.firebaseapp.com",
 
-  projectId: "my-stories-2556b",
+  projectId: "wired-beauty",
 
-  storageBucket: "my-stories-2556b.appspot.com",
+  storageBucket: "wired-beauty.appspot.com",
 
-  messagingSenderId: "546332129502",
+  messagingSenderId: "347222321117",
 
-  appId: "1:546332129502:web:2500149a0d422e0cb1aa4f"
+  appId: "1:347222321117:web:2ae6dcc741c63ea0c4b834"
+
 
 };
 

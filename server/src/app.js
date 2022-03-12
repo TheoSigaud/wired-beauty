@@ -2,120 +2,258 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
+const admin = require("firebase-admin")
+var serviceAccount = require("./wired-beauty-firebase-adminsdk-eo81i-887291162f.json");
 
-const Post = require("../models/posts");
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
+const User = require("../models/users");
+const Pdf = require("../models/pdf");
+const PdfUsers = require("../models/pdfUsers");
 
 const app = express()
 app.use(morgan('combined'))
-app.use(bodyParser.json({limit : '50mb', extended : true}))
-app.use(bodyParser.urlencoded({limit : '50mb', extended : true}))
+app.use(bodyParser.json({limit: '50mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 app.use(cors())
 
 // DB Setup
 var mongoose = require('mongoose');
 
 var DATABASE_URL = process.env.DATABASE_URL || 'http://localhost'
-mongoose.connect(`mongodb://${DATABASE_URL}/posts`, { useNewUrlParser: true });
+mongoose.connect(`mongodb://${DATABASE_URL}/posts`, {useNewUrlParser: true});
 
 var db = mongoose.connection;
 
 db.on('error', function (error) {
-  // If first connect fails because server-database isn't up yet, try again.
-  // This is only needed for first connect, not for runtime reconnects.
-  // See: https://github.com/Automattic/mongoose/issues/5169
-  if (error.message && error.message.match(/failed to connect to server .* on first connect/)) {
-    setTimeout(function () {
-      mongoose.connect(`mongodb://${DATABASE_URL}/posts`, { useNewUrlParser: true }).catch(() => {
-        // empty catch avoids unhandled rejections
-      });
-    }, 20 * 1000);
-  } else {
-    // Some other error occurred.  Log it.
-    console.error(new Date(), String(error));
-  }
-});
-
-db.once("open", function(callback){
-  console.log("Connection Succeeded");
-});
-
-// SERVER Setup
-app.get('/posts', (req, res) => {
-  Post.find({}, 'title description', function (error, posts) {
-    if (error) { console.error(error); }
-    res.send({
-      posts: posts
-    })
-  }).sort({_id:-1})
-});
-
-
-// Post Endpoints
-app.post('/posts', (req, res) => {
-  var db = req.db;
-  var title = req.body.title;
-  var description = req.body.description;
-  var new_post = new Post({
-    title: title,
-    description: description
-  })
-
-  new_post.save(function (error) {
-    if (error) {
-      console.log(error)
+    // If first connect fails because server-database isn't up yet, try again.
+    // This is only needed for first connect, not for runtime reconnects.
+    // See: https://github.com/Automattic/mongoose/issues/5169
+    if (error.message && error.message.match(/failed to connect to server .* on first connect/)) {
+        setTimeout(function () {
+            mongoose.connect(`mongodb://${DATABASE_URL}/posts`, {useNewUrlParser: true}).catch(() => {
+                // empty catch avoids unhandled rejections
+            });
+        }, 20 * 1000);
+    } else {
+        // Some other error occurred.  Log it.
+        console.error(new Date(), String(error));
     }
-    res.send({
-      success: true,
-      message: 'Post saved successfully!'
+});
+
+db.once("open", function (callback) {
+    console.log("Connection Succeeded");
+});
+
+//List all users
+app.get('/api/users', (req, res) => {
+    User.find({}, 'email uid', function (error, users) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            users: users
+        })
+    }).sort({_id: -1})
+});
+
+//Create new user
+app.post('/api/users', (req, res) => {
+    console.log('tzugdgazvv')
+    const email = req.body.email.trim();
+
+    admin.auth()
+        .createUser({
+            email: email,
+            password: generatePwd()
+        })
+        .then((userRecord) => {
+            // See the UserRecord reference doc for the contents of userRecord.
+            console.log('Successfully created new user:', userRecord.uid);
+
+            const new_user = new User({
+                email: email,
+                uid: userRecord.uid
+            })
+
+            new_user.save(function (error) {
+                if (error) {
+                    console.log(error)
+                }
+                res.status(201);
+                res.send({
+                    success: true,
+                    message: 'User saved successfully!'
+                });
+            });
+        })
+        .catch((error) => {
+            console.log('Error creating new user:', error);
+            res.status(200);
+            res.send({
+                success: false,
+                message: 'User already exist!'
+            });
+        });
+});
+
+//Delete user
+app.post('/api/delete-user', (req, res) => {
+    const uid = req.body.uid;
+
+    admin.auth().deleteUser(uid)
+        .then(() => {
+            console.log('Successfully deleted user');
+            User.deleteOne({
+                uid: uid
+            }, function(err, post){
+                if (err)
+                    res.send(err)
+                res.send({
+                    success: true
+                })
+            })
+        })
+        .catch((error) => {
+            console.log('Error deleting user:', error);
+        });
+});
+
+app.post('/api/save-pdf', (req, res) => {
+    let pdf = req.body.pdf;
+    let name = req.body.name;
+
+    const new_pdf = new Pdf({
+        name: name,
+        pdf: pdf
     })
-  })
-})
 
+    new_pdf.save(function (error) {
+        if (error) {
+            console.log(error)
+        }
+        res.status(201);
+        res.send({
+            success: true,
+            message: 'Pdf saved successfully!'
+        });
+    });
+});
 
-// Fetch single post
-app.get('/post/:id', (req, res) => {
-  var db = req.db;
-  Post.findById(req.params.id, 'title description', function (error, post) {
-    if (error) { console.error(error); }
-    res.send(post)
-  })
-})
+//List all pdf
+app.get('/api/pdf', (req, res) => {
+    Pdf.find({}, 'name pdf', function (error, pdf) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            pdf: pdf
+        })
+    }).sort({_id: -1})
+});
 
-// Update a post
-app.put('/posts/:id', (req, res) => {
-  var db = req.db;
-  Post.findById(req.params.id, 'title description', function (error, post) {
-    if (error) { console.error(error); }
+//Delete pdf
+app.post('/api/delete-pdf', (req, res) => {
+    const name = req.body.name;
 
-    post.title = req.body.title
-    post.description = req.body.description
-    post.save(function (error) {
-      if (error) {
-        console.log(error)
-      }
-      res.send({
-        success: true
-      })
+    Pdf.deleteOne({
+        name: name
+    }, function(err, post){
+        if (err)
+            res.send(err)
+        res.send({
+            success: true
+        })
     })
-  })
-})
+});
 
-// Delete a post
-app.delete('/posts/:id', (req, res) => {
-  var db = req.db;
-  Post.remove({
-    _id: req.params.id
-  }, function(err, post){
-    if (err)
-      res.send(err)
-    res.send({
-      success: true
+app.post('/api/pdf-user', (req, res) => {
+    let email = req.body.email;
+    let name = req.body.name;
+
+    const new_pdf = new PdfUsers({
+        name: name,
+        email: email
     })
-  })
-})
 
-require('./Controllers/users')(app);
-require('./Controllers/stories')(app);
+    new_pdf.save(function (error) {
+        if (error) {
+            console.log(error)
+        }
+        res.status(201);
+        res.send({
+            success: true,
+            message: 'Pdf saved successfully!'
+        });
+    });
+});
 
+app.post('/api/user-pdf', (req, res) => {
+    let email = req.body.email;
+
+    PdfUsers.find({email: email}, function (error, reports) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            reports: reports
+        })
+    }).sort({_id: -1})
+});
+
+app.post('/api/get-pdf', (req, res) => {
+    let name = req.body.name;
+
+    Pdf.find({name: name}, function (error, pdf) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            pdf: pdf
+        })
+    }).sort({_id: -1})
+});
+
+app.post('/api/users-pdf', (req, res) => {
+    let name = req.body.name;
+
+    PdfUsers.find({name: name}, function (error, users) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            users: users
+        })
+    }).sort({_id: -1})
+});
+
+app.post('/api/delete-user-pdf', (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+
+    PdfUsers.deleteOne({
+        email: email,
+        name: name
+    }, function(err, post){
+        if (err)
+            res.send(err)
+        res.send({
+            success: true
+        })
+    })
+});
+
+function generatePwd() {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < 15; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
 
 app.listen(process.env.PORT || 8081)

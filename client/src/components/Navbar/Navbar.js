@@ -1,18 +1,27 @@
-import {getAuth, signOut} from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 const auth = getAuth();
 
 export default {
   name: 'Navbar',
 
-  data () {
+  data() {
     return {
-      displayNavbar: false
+      admin: false
     }
   },
-  displayNavbar: false,
+
+  mounted() {
+    onAuthStateChanged(auth, (user) => {
+      if (user.email === 'wired@gmail.com') {
+        this.admin = true;
+      } else {
+        this.admin = false;
+      }
+    })
+  },
 
   methods: {
-    async logOut () {
+    async logOut() {
       signOut(auth).then(() => {
         this.$router.push({ name: 'Login' })
       })

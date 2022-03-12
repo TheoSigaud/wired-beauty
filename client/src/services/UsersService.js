@@ -9,7 +9,7 @@ export default {
     return Api().post('/api/users', params)
   },
 
-  checkUser (params) {
-    return Api().post('/api/check-user', params)
+  deleteUser (params) {
+    return Api().post('/api/delete-user', params)
   }
 }
