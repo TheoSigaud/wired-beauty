@@ -83,18 +83,6 @@
                       Log in
                     </button>
                   </div>
-<<<<<<< HEAD
-
-                  <div class="row d-flex justify-content-center m-3">
-                    <p
-                      style="color: #bec5ce"
-                      class="text-center font-weight-bold"
-                    >
-                      You have forgot your password ?
-                    </p>
-                  </div>
-=======
->>>>>>> e0ba5043f6049145961ee9f21bf605a74c80469e
                 </form>
               </div>
             </div>
