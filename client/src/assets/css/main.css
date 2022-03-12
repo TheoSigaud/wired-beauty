@@ -1854,6 +1854,14 @@
     text-shadow: 0 0 0 #6e707e;
   }
   
+  .form-login{
+    border: none !important;
+    height: 40px !important;
+  }
+  .shadow-inverse{
+    box-shadow:inset 5px 5px 10px #e6e6e6,
+    inset -5px -5px 10px #FFF;
+  }
   .form-control:focus {
     color: #6e707e;
     background-color: #fff;
