@@ -1,10 +1,10 @@
-import {getAuth, onAuthStateChanged, signOut} from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 const auth = getAuth();
 
 export default {
   name: 'Navbar',
 
-  data () {
+  data() {
     return {
       admin: false
     }
@@ -21,7 +21,7 @@ export default {
   },
 
   methods: {
-    async logOut () {
+    async logOut() {
       signOut(auth).then(() => {
         this.$router.push({ name: 'Login' })
       })
