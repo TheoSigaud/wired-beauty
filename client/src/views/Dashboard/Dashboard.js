@@ -360,8 +360,11 @@ export default {
       let canvas = document.createElement("canvas");
       canvas.setAttribute('id', nameChart);
 
-      div.append(canvas);
-      containerCharts.append(div);
+      div.append(canvas); 
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
+
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -599,7 +602,10 @@ export default {
       canvas.setAttribute('id', nameChart);
       let chartImg = canvas.toDataURL("image/png", 1.0);
       div.append(canvas);
-      containerCharts.append(div);
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
+
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -709,7 +715,9 @@ export default {
       canvas.setAttribute('id', nameChart);
 
       div.append(canvas);
-      containerCharts.append(div);
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -843,7 +851,9 @@ export default {
 
       div.append(canvas);
       div.append(textarea);
-      containerCharts.append(div);
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
