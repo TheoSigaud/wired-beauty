@@ -36,7 +36,7 @@
             Customize your report here :
           </h5>
         </div>
-        <div class="row align-items-center justify-content-center">
+        <div class="row align-items-center justify-content-center container">
           <div class="col-xl-4 col-md-4 mb-2" v-if="showSelection">
             <label>Chart type</label>
             <select
