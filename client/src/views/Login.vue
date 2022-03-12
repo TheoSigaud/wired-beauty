@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container"> 
+    <div class="container">
 
       <div class="row d-flex justify-content-center m-5">
         <div class="col-lg-10 m-auto p-3">
@@ -33,10 +33,6 @@
 
                   <div class="row d-flex justify-content-center m-3">
                     <button style="background-color:#8FDFCC;color:white" class="btn btn-lg time-button__green shadow col-lg-4 font-weight-bold" type="submit">Log in</button>
-                  </div>
-                  
-                  <div class="row d-flex justify-content-center m-3">
-                    <p style="color:#BEC5CE" class="text-center font-weight-bold">You have forgot your password ?</p>
                   </div>
                 </form>
               </div>
