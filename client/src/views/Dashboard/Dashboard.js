@@ -300,8 +300,8 @@ export default {
         {
           label: 'Skc',
           data: dataSkc,
-          borderColor: '#0dd1db',
-          pointBackgroundColor: '#0dd1db',
+          borderColor: '#8FDFCC',
+          pointBackgroundColor: '#8FDFCC',
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
@@ -312,8 +312,8 @@ export default {
         {
           label: 'Vitc',
           data: dataVitc,
-          borderColor: '#c03522',
-          pointBackgroundColor: '#c03522',
+          borderColor: '#96A7E4',
+          pointBackgroundColor: '#96A7E4',
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
@@ -539,7 +539,7 @@ export default {
         {
           label: 'Skc',
           data: dataSkcBar,
-          backgroundColor: 'rgb(190,45,45)',
+          backgroundColor: '#96A7E4',
           borderWidth: 0,
           stack: 'skc'
         },
@@ -555,7 +555,7 @@ export default {
         {
           label: 'Vitc',
           data: dataVitcBar,
-          backgroundColor: 'rgb(13,209,219)',
+          backgroundColor: '#8FDFCC',
           borderWidth: 0,
           stack: 'vitc'
         },
@@ -677,8 +677,8 @@ export default {
         {
           label: type,
           data: data,
-          borderColor: '#c03522',
-          pointBackgroundColor: '#c03522',
+          borderColor: '#96A7E4',
+          pointBackgroundColor: '#96A7E4',
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
@@ -803,7 +803,7 @@ export default {
         {
           label: 'Skc',
           data: dataBar,
-          backgroundColor: 'rgb(190,45,45)',
+          backgroundColor: '#96A7E4',
           borderWidth: 0,
           stack: type
         },
