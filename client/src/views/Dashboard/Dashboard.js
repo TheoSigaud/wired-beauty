@@ -299,8 +299,8 @@ export default {
         {
           label: 'Skc',
           data: dataSkc,
-          borderColor: '#0dd1db',
-          pointBackgroundColor: '#0dd1db',
+          borderColor: '#8FDFCC',
+          pointBackgroundColor: '#8FDFCC',
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
@@ -311,8 +311,8 @@ export default {
         {
           label: 'Vitc',
           data: dataVitc,
-          borderColor: '#c03522',
-          pointBackgroundColor: '#c03522',
+          borderColor: '#96A7E4',
+          pointBackgroundColor: '#96A7E4',
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
@@ -359,8 +359,11 @@ export default {
       let canvas = document.createElement("canvas");
       canvas.setAttribute('id', nameChart);
 
-      div.append(canvas);
-      containerCharts.append(div);
+      div.append(canvas); 
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
+
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -538,7 +541,7 @@ export default {
         {
           label: 'Skc',
           data: dataSkcBar,
-          backgroundColor: 'rgb(190,45,45)',
+          backgroundColor: '#96A7E4',
           borderWidth: 0,
           stack: 'skc'
         },
@@ -554,7 +557,7 @@ export default {
         {
           label: 'Vitc',
           data: dataVitcBar,
-          backgroundColor: 'rgb(13,209,219)',
+          backgroundColor: '#8FDFCC',
           borderWidth: 0,
           stack: 'vitc'
         },
@@ -598,7 +601,10 @@ export default {
       canvas.setAttribute('id', nameChart);
       let chartImg = canvas.toDataURL("image/png", 1.0);
       div.append(canvas);
-      containerCharts.append(div);
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
+
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -676,8 +682,8 @@ export default {
         {
           label: type,
           data: data,
-          borderColor: '#c03522',
-          pointBackgroundColor: '#c03522',
+          borderColor: '#96A7E4',
+          pointBackgroundColor: '#96A7E4',
           borderWidth: 1,
           pointRadius: 5,
           pointHoverRadius: 10,
@@ -708,7 +714,9 @@ export default {
       canvas.setAttribute('id', nameChart);
 
       div.append(canvas);
-      containerCharts.append(div);
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {
@@ -802,7 +810,7 @@ export default {
         {
           label: 'Skc',
           data: dataBar,
-          backgroundColor: 'rgb(190,45,45)',
+          backgroundColor: '#96A7E4',
           borderWidth: 0,
           stack: type
         },
@@ -842,7 +850,9 @@ export default {
 
       div.append(canvas);
       div.append(textarea);
-      containerCharts.append(div);
+      if (containerCharts.children.length < 2) {
+        containerCharts.append(div);
+      }
       const plugin = {
         id: 'custom_canvas_background_color',
         beforeDraw: (chart) => {

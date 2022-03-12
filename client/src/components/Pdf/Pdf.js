@@ -19,7 +19,7 @@ export default {
         var today = new Date();
         var date = today.getDate() + '/' + (today.getMonth() + 1) + '/' + today.getFullYear();
         const worksheet = this.values[0];
-        var ReportName = "Report " + date;
+        var ReportName = this.namePdf + " - Report " + date;
         let commentHydratant = document.getElementById('CommentHydratant').value;
         let commentAntiOxydant = document.getElementById('CommentAntiOxydant').value;
         let commentBarriere = document.getElementById('CommentBarriere').value;
@@ -119,15 +119,13 @@ export default {
         doc.text(" Paris", 22, 88)
         doc.text("1000 ", 41, 96)
 
-        const coorChartsx = [10, 100, 10, 100]
-        const coorChartsy = [80, 80, 20, 20]
+        doc.addImage(this.charts[0][0], 'PNG', 2, 170, 100, 50);
+        doc.addImage(this.charts[1][0], 'PNG', 110, 170, 100, 50);
 
+        doc.setFont(undefined,"bold").setFontSize(13)
+        doc.text("Strong points ", 25, 230)
 
         doc.save(ReportName + ".pdf");
-
-        doc.text("Comparer Moyenne" + labels[0] + "&" + labels[1] + "de T0 à T1 avec pour critères 1 = Hydratant Moyenne sur (N = 1000) - Date début", 10, 15);
-        doc.setFontSize(10);
-        doc.addImage(this.values[0][0].toString(), 'png', 10, 30, 100, 100);
 
         let pdf = doc.output("blob");
 
