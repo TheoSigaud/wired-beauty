@@ -7,6 +7,7 @@ export default {
     return {
       pdfs: [],
       users: [],
+      usersPdf: [],
       namePdf: ''
     }
   },
@@ -57,6 +58,28 @@ export default {
             }
           });
         });
+
+      $(document).ready(function () {
+        $('#tableUsersDelete').DataTable({
+          responsive: true,
+          paging: true,
+          ordering: true,
+          info: true,
+          language: {
+            lengthMenu: "Nombre d'éléments par page: _MENU_",
+            zeroRecords: "Aucun résultat ...",
+            info: "Page _PAGE_ sur _PAGES_",
+            infoEmpty: "",
+            infoFiltered: "(Filtrer à partir de _MAX_ total enregistrés)",
+            paginate: {
+              "next": "Suivant",
+              "previous": "Précédent"
+            },
+            search: "",
+            searchPlaceholder: "Rechercher"
+          }
+        });
+      });
     })
   },
 
@@ -97,6 +120,23 @@ export default {
       }).then(() => {
         this.getPdf();
       });
+    },
+
+    async getUsersPdf(name) {
+      PdfService.fetchUsersPdf({
+        name: name
+      }).then((response) => {
+        this.usersPdf = response.data.users;
+      });
+    },
+
+    async deleteUserPdf(email, name) {
+      PdfService.deletePdfuser({
+        email: email,
+        name: name
+      }).then(() => {
+        $("#modal-delete").hide();
+      })
     }
   }
 }

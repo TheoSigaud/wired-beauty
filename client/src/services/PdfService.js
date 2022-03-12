@@ -23,5 +23,13 @@ export default {
 
   getPdf (params) {
     return Api().post('/api/get-pdf', params)
+  },
+
+  fetchUsersPdf (params) {
+    return Api().post('/api/users-pdf', params)
+  },
+
+  deletePdfuser (params) {
+    return Api().post('/api/delete-user-pdf', params)
   }
 }

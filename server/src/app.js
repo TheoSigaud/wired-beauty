@@ -216,6 +216,35 @@ app.post('/api/get-pdf', (req, res) => {
     }).sort({_id: -1})
 });
 
+app.post('/api/users-pdf', (req, res) => {
+    let name = req.body.name;
+
+    PdfUsers.find({name: name}, function (error, users) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            users: users
+        })
+    }).sort({_id: -1})
+});
+
+app.post('/api/delete-user-pdf', (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+
+    PdfUsers.deleteOne({
+        email: email,
+        name: name
+    }, function(err, post){
+        if (err)
+            res.send(err)
+        res.send({
+            success: true
+        })
+    })
+});
+
 function generatePwd() {
     var result = '';
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
