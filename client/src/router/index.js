@@ -8,6 +8,7 @@ import Users from '@/views/Users/Users.vue'
 import NewUser from '@/views/Users/NewUser/NewUser.vue'
 import Dashboard from '@/views/Dashboard/Dashboard.vue'
 import Report from '@/views/Report/Report.vue'
+import Pdf from '@/views/Pdf/Pdf.vue'
 
 Vue.use(Router)
 
@@ -63,6 +64,18 @@ const router = new Router({
         {
           path: '',
           name: 'Report',
+          component: Navbar
+        }
+      ]
+    },
+    {
+      path: '/pdf',
+      component: Pdf,
+      meta: {requiresAuth: true},
+      children: [
+        {
+          path: '',
+          name: 'Pdf',
           component: Navbar
         }
       ]

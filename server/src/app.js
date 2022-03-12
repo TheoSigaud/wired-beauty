@@ -10,6 +10,8 @@ admin.initializeApp({
 });
 
 const User = require("../models/users");
+const Pdf = require("../models/pdf");
+const PdfUsers = require("../models/pdfUsers");
 
 const app = express()
 app.use(morgan('combined'))
@@ -59,12 +61,8 @@ app.get('/api/users', (req, res) => {
 
 //Create new user
 app.post('/api/users', (req, res) => {
+    console.log('tzugdgazvv')
     const email = req.body.email.trim();
-
-
-    const new_user = new User({
-        email: email
-    })
 
     admin.auth()
         .createUser({
@@ -101,7 +99,7 @@ app.post('/api/users', (req, res) => {
         });
 });
 
-//List all users
+//Delete user
 app.post('/api/delete-user', (req, res) => {
     const uid = req.body.uid;
 
@@ -121,6 +119,130 @@ app.post('/api/delete-user', (req, res) => {
         .catch((error) => {
             console.log('Error deleting user:', error);
         });
+});
+
+app.post('/api/save-pdf', (req, res) => {
+    let pdf = req.body.pdf;
+    let name = req.body.name;
+
+    const new_pdf = new Pdf({
+        name: name,
+        pdf: pdf
+    })
+
+    new_pdf.save(function (error) {
+        if (error) {
+            console.log(error)
+        }
+        res.status(201);
+        res.send({
+            success: true,
+            message: 'Pdf saved successfully!'
+        });
+    });
+});
+
+//List all pdf
+app.get('/api/pdf', (req, res) => {
+    Pdf.find({}, 'name pdf', function (error, pdf) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            pdf: pdf
+        })
+    }).sort({_id: -1})
+});
+
+//Delete pdf
+app.post('/api/delete-pdf', (req, res) => {
+    const name = req.body.name;
+
+    Pdf.deleteOne({
+        name: name
+    }, function(err, post){
+        if (err)
+            res.send(err)
+        res.send({
+            success: true
+        })
+    })
+});
+
+app.post('/api/pdf-user', (req, res) => {
+    let email = req.body.email;
+    let name = req.body.name;
+
+    const new_pdf = new PdfUsers({
+        name: name,
+        email: email
+    })
+
+    new_pdf.save(function (error) {
+        if (error) {
+            console.log(error)
+        }
+        res.status(201);
+        res.send({
+            success: true,
+            message: 'Pdf saved successfully!'
+        });
+    });
+});
+
+app.post('/api/user-pdf', (req, res) => {
+    let email = req.body.email;
+
+    PdfUsers.find({email: email}, function (error, reports) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            reports: reports
+        })
+    }).sort({_id: -1})
+});
+
+app.post('/api/get-pdf', (req, res) => {
+    let name = req.body.name;
+
+    Pdf.find({name: name}, function (error, pdf) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            pdf: pdf
+        })
+    }).sort({_id: -1})
+});
+
+app.post('/api/users-pdf', (req, res) => {
+    let name = req.body.name;
+
+    PdfUsers.find({name: name}, function (error, users) {
+        if (error) {
+            console.error(error);
+        }
+        res.send({
+            users: users
+        })
+    }).sort({_id: -1})
+});
+
+app.post('/api/delete-user-pdf', (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+
+    PdfUsers.deleteOne({
+        email: email,
+        name: name
+    }, function(err, post){
+        if (err)
+            res.send(err)
+        res.send({
+            success: true
+        })
+    })
 });
 
 function generatePwd() {
