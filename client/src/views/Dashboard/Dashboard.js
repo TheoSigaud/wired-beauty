@@ -27,7 +27,6 @@ export default {
       showCompare: false,
       showScore: false,
       pdfValues: [],
-      charts: [],
       label1: '',
       label2: ''
     }
