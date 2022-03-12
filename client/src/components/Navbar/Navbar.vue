@@ -24,17 +24,22 @@
 
     <li class="nav-item">
       <a
-        class="nav-link collapsed"
-        href="#"
+        class="sidebar-brand d-flex align-items-center justify-content-center"
+        href="/dashboard"
       >
-        <i class="fa-solid fa-users"></i>
-        <span>Clients</span>
+        <div class="mx-5 px-5">
+          <img
+            src="../../assets/logoWhite.png"
+            width="110"
+            height="110"
+            alt="Wired Beauty"
+          />
+        </div>
       </a>
-    </li>
 
-    <hr class="sidebar-divider" />
+      <hr class="sidebar-divider" />
 
-    <div class="sidebar-heading">Our data</div>
+      <div class="sidebar-heading">&nbsp;&nbsp;&nbsp;Our clients</div>
 
     <li class="nav-item">
       <a

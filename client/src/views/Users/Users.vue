@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <router-view/>
+  <div class="row">
+    <router-view class="col-3"/>
 
+    <div class="col-8">
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div class="container-fluid">
     <h1>Users</h1>
     <router-link v-bind:to="{ name: 'NewUser' }" class="btn time-button__green mb-5">Crétion d'un client
     </router-link>
@@ -15,15 +18,18 @@
         </thead>
         <tbody>
         <tr v-bind:key="user.id" v-for="user in users">
-          <td style="color: white">{{ user.email }}</td>
+          <td>{{ user.email }}</td>
           <td>
-            <button @click="resetPassword(user.email)">Réinitialiser le mot de passe</button>
-            <button @click="deleteUser(user.uid)">Supprimer</button>
+            <button class="btn btn-primary" @click="resetPassword(user.email)">Réinitialiser le mot de passe</button>
+            <button class="btn btn-primary" @click="deleteUser(user.uid)">Supprimer</button>
           </td>
         </tr>
         </tbody>
       </table>
     </div>
+  </div>
+    </div>
+  </div>
   </div>
 </template>
 
